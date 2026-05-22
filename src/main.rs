@@ -34,7 +34,7 @@ struct Args {
     #[arg(short = 'D', long, default_value = ":")]
     divider: char,
     /// Scan all files matching extensions in a directory
-    #[arg(short = 'a', long, default_value = "false")]
+    #[arg(short = 'a', long)]
     all: bool,
     /// File extensions to scan (comma-separated). Default: txt
     #[arg(short = 'x', long = "extensions", default_value = "txt", value_delimiter = ',')]
@@ -42,6 +42,12 @@ struct Args {
     /// Directory to scan when using --all (defaults to current dir)
     #[arg(long = "dir", default_value = ".")]
     dir: PathBuf,
+    /// Scan directories recursively (only with --all)
+    #[arg(short = 'r', long)]
+    recursive: bool,
+    /// Append to output file instead of overwriting
+    #[arg(short = 'A', long)]
+    append: bool,
 }
 
 // ── Entry Point ──────────────────────────────────────────────────────────
@@ -63,7 +69,7 @@ fn print_header() {
     let top = "┌".to_string() + &"─".repeat(w.saturating_sub(2)) + "┐";
     let bot = "└".to_string() + &"─".repeat(w.saturating_sub(2)) + "┘";
 
-    let title = " ulpExtractor v0.4.0 ";
+    let title = " ulpExtractor v0.4.1 ";
     let subtitle = " Domain credential extractor ";
 
     let pad = (w.saturating_sub(title.len())) / 2;
@@ -120,6 +126,7 @@ fn cli_mode(args: Args) -> std::io::Result<()> {
         }
     };
 
+    let threads = args.threads.max(1).min(64);
     let input_files: Vec<PathBuf> = resolve_input_files(&args)?;
 
     // Print config
@@ -130,15 +137,16 @@ fn cli_mode(args: Args) -> std::io::Result<()> {
 
     print_field("Domain", &domain);
     if args.all {
-        print_field("Mode", &format!("all ({}) — {} files", exts_display, input_files.len()));
+        let mode_label = if args.recursive { "all recursive" } else { "all" };
+        print_field("Mode", &format!("{} ({}) — {} files", mode_label, exts_display, input_files.len()));
         for f in &input_files {
             println!("         {}", style(f.file_name().unwrap_or_default().to_string_lossy()).dim());
         }
     } else {
         print_field("Input", &input_files[0].display().to_string());
     }
-    print_field("Output", &args.output.display().to_string());
-    print_field("Threads", &args.threads.to_string());
+    print_field("Output", &format!("{} {}", args.output.display().to_string(), if args.append { "(append)" } else { "" }));
+    print_field("Threads", &threads.to_string());
     print_field("Divider", &format!("'{}'", args.divider));
     print_divider();
 
@@ -151,7 +159,7 @@ fn cli_mode(args: Args) -> std::io::Result<()> {
     );
     println!();
 
-    run_extraction(&input_files, &domain, args.divider, args.threads, &args.output, total_bytes)
+    run_extraction(&input_files, &domain, args.divider, threads, &args.output, total_bytes, args.append)
 }
 
 // ── Interactive Mode ─────────────────────────────────────────────────────
@@ -188,6 +196,12 @@ fn interactive_mode() -> std::io::Result<()> {
         reader.read_line(&mut dir_s)?;
         let dir = if dir_s.trim().is_empty() { PathBuf::from(".") } else { PathBuf::from(dir_s.trim()) };
 
+        print!("  {} (y/N): ", style("Recursive:").cyan().bold());
+        std::io::stdout().flush()?;
+        let mut rec_s = String::new();
+        reader.read_line(&mut rec_s)?;
+        let recursive = matches!(rec_s.trim().to_lowercase().as_str(), "y" | "yes");
+
         print!("  {} (comma-separated, default: txt): ", style("Extensions:").cyan().bold());
         std::io::stdout().flush()?;
         let mut exts = String::new();
@@ -198,7 +212,7 @@ fn interactive_mode() -> std::io::Result<()> {
             exts.trim().split(',').map(|s| s.trim().to_string()).collect()
         };
 
-        let found = extractor::find_files(&dir, &exts)?;
+        let found = extractor::find_files(&dir, &exts, recursive)?;
         if found.is_empty() {
             eprintln!("{}", style(format!("No files in '{}' with extensions: {:?}", dir.display(), exts)).red());
             std::process::exit(1);
@@ -229,6 +243,13 @@ fn interactive_mode() -> std::io::Result<()> {
     reader.read_line(&mut output_s)?;
     let output = if output_s.trim().is_empty() { PathBuf::from("output.txt") } else { PathBuf::from(output_s.trim()) };
 
+    // Append
+    print!("  {} (y/N): ", style("Append to output:").cyan().bold());
+    std::io::stdout().flush()?;
+    let mut append_s = String::new();
+    reader.read_line(&mut append_s)?;
+    let append = matches!(append_s.trim().to_lowercase().as_str(), "y" | "yes");
+
     // Threads
     print!("  {} (default: 4): ", style("Threads:").cyan().bold());
     std::io::stdout().flush()?;
@@ -250,7 +271,7 @@ fn interactive_mode() -> std::io::Result<()> {
     println!("  {} {}", style("Total size:").cyan(), style(format_bytes(total_bytes)).white().bold());
     println!();
 
-    run_extraction(&input_files, &domain, divider, threads, &output, total_bytes)
+    run_extraction(&input_files, &domain, divider, threads, &output, total_bytes, append)
 }
 
 // ── Shared Extraction Runner ─────────────────────────────────────────────
@@ -262,15 +283,23 @@ fn run_extraction(
     threads: usize,
     output_path: &PathBuf,
     total_bytes: u64,
+    append: bool,
 ) -> std::io::Result<()> {
     let total = total_bytes as usize;
 
     let pb = new_progress_bar(total as u64);
     let cancelled = Arc::new(AtomicBool::new(false));
 
+    // Ctrl-C handler — set cancelled flag so extraction flushes partial results
+    let c_clone = Arc::clone(&cancelled);
+    ctrlc::set_handler(move || {
+        c_clone.store(true, std::sync::atomic::Ordering::SeqCst);
+    }).expect("Error setting Ctrl-C handler");
+
     let progress = Arc::new(extractor::ExtractProgress::new(total));
     let p_clone = Arc::clone(&progress);
     let pb_clone = pb.clone();
+    let canc_clone = Arc::clone(&cancelled);
 
     // Background thread: poll progress and update bar
     std::thread::spawn(move || loop {
@@ -279,10 +308,15 @@ fn run_extraction(
         let tot = p_clone.total.load(std::sync::atomic::Ordering::Relaxed);
 
         pb_clone.set_position(processed as u64);
-        pb_clone.set_message(format!("Matches: {}", style_number(matched)));
+        pb_clone.set_message(format!("Matches: {}", format_number(matched as u64)));
 
-        if processed >= tot && tot > 0 {
-            pb_clone.finish_with_message(format!("Done — {} matches", style_number(matched)));
+        let stopped = canc_clone.load(std::sync::atomic::Ordering::Relaxed);
+        if processed >= tot && tot > 0 || stopped {
+            if stopped {
+                pb_clone.finish_with_message(format!("Cancelled — {} matches flushed", format_number(matched as u64)));
+            } else {
+                pb_clone.finish_with_message(format!("Done — {} matches", format_number(matched as u64)));
+            }
             break;
         }
         std::thread::sleep(std::time::Duration::from_millis(100));
@@ -296,7 +330,8 @@ fn run_extraction(
             threads,
             output_path,
             progress,
-            cancelled,
+            cancelled.clone(),
+            append,
         )?
     } else {
         extractor::extract_multi(
@@ -306,22 +341,35 @@ fn run_extraction(
             threads,
             output_path,
             progress,
-            cancelled,
+            cancelled.clone(),
+            append,
         )?
     };
 
     pb.finish_and_clear();
 
     // Summary
+    let was_cancelled = cancelled.load(std::sync::atomic::Ordering::Relaxed);
     println!();
-    println!(
-        "  {}  {} matches from {} across {} file(s) in {:.1}s",
-        style("✓").green().bold(),
-        style(format_number(result.matched_count as u64)).green().bold(),
-        style(format_bytes(result.total_bytes)).white(),
-        input_files.len(),
-        result.duration_ms as f64 / 1000.0
-    );
+    if was_cancelled {
+        println!(
+            "  {}  {} matches flushed from {} across {} file(s) in {:.1}s (cancelled)",
+            style("!").yellow().bold(),
+            style(format_number(result.matched_count as u64)).yellow().bold(),
+            style(format_bytes(result.total_bytes)).white(),
+            input_files.len(),
+            result.duration_ms as f64 / 1000.0
+        );
+    } else {
+        println!(
+            "  {}  {} matches from {} across {} file(s) in {:.1}s",
+            style("✓").green().bold(),
+            style(format_number(result.matched_count as u64)).green().bold(),
+            style(format_bytes(result.total_bytes)).white(),
+            input_files.len(),
+            result.duration_ms as f64 / 1000.0
+        );
+    }
     println!(
         "  {}  {}",
         style("→").dim(),
@@ -336,7 +384,7 @@ fn run_extraction(
 
 fn resolve_input_files(args: &Args) -> Result<Vec<PathBuf>, std::io::Error> {
     if args.all {
-        let found = extractor::find_files(&args.dir, &args.extensions)?;
+        let found = extractor::find_files(&args.dir, &args.extensions, args.recursive)?;
         if found.is_empty() {
             eprintln!("{}", style(format!(
                 "No files found in '{}' with extensions: {:?}",
@@ -387,13 +435,3 @@ fn format_number(n: u64) -> String {
     }
 }
 
-fn style_number(n: usize) -> String {
-    let n = n as u64;
-    if n >= 1_000_000 {
-        format!("{:.1}M", n as f64 / 1_000_000.0)
-    } else if n >= 1_000 {
-        format!("{:.1}K", n as f64 / 1_000.0)
-    } else {
-        n.to_string()
-    }
-}

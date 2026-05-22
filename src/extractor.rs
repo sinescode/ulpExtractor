@@ -1,4 +1,5 @@
-use std::fs::{self, File};
+use std::collections::HashSet;
+use std::fs::{self, File, OpenOptions};
 use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
@@ -65,7 +66,7 @@ fn domain_end(user_part: &[u8], domain: &[u8]) -> Option<usize> {
     None
 }
 
-pub fn find_files(dir: &Path, extensions: &[String]) -> std::io::Result<Vec<PathBuf>> {
+pub fn find_files(dir: &Path, extensions: &[String], recursive: bool) -> std::io::Result<Vec<PathBuf>> {
     let exts: Vec<String> = extensions
         .iter()
         .map(|e| {
@@ -75,10 +76,32 @@ pub fn find_files(dir: &Path, extensions: &[String]) -> std::io::Result<Vec<Path
         .collect();
 
     let mut files = Vec::new();
+    if recursive {
+        find_files_recursive(dir, &exts, &mut files)?;
+    } else {
+        for entry in fs::read_dir(dir)? {
+            let entry = entry?;
+            let path = entry.path();
+            if path.is_file() {
+                let matches = path.extension()
+                    .and_then(|e| e.to_str())
+                    .map(|e| exts.iter().any(|ext| ext[1..] == e.to_lowercase()))
+                    .unwrap_or(false);
+                if matches { files.push(path); }
+            }
+        }
+    }
+    files.sort();
+    Ok(files)
+}
+
+fn find_files_recursive(dir: &Path, exts: &[String], files: &mut Vec<PathBuf>) -> std::io::Result<()> {
     for entry in fs::read_dir(dir)? {
         let entry = entry?;
         let path = entry.path();
-        if path.is_file() {
+        if path.is_dir() {
+            find_files_recursive(&path, exts, files)?;
+        } else if path.is_file() {
             let matches = path.extension()
                 .and_then(|e| e.to_str())
                 .map(|e| exts.iter().any(|ext| ext[1..] == e.to_lowercase()))
@@ -86,8 +109,7 @@ pub fn find_files(dir: &Path, extensions: &[String]) -> std::io::Result<Vec<Path
             if matches { files.push(path); }
         }
     }
-    files.sort();
-    Ok(files)
+    Ok(())
 }
 
 /// Sum file sizes (instant — just metadata).
@@ -110,8 +132,9 @@ pub fn extract(
     output_path: &Path,
     progress: Arc<ExtractProgress>,
     cancelled: Arc<AtomicBool>,
+    append: bool,
 ) -> std::io::Result<ExtractResult> {
-    extract_multi(&[input_path.to_path_buf()], domain, divider, threads, output_path, progress, cancelled)
+    extract_multi(&[input_path.to_path_buf()], domain, divider, threads, output_path, progress, cancelled, append)
 }
 
 /// Extract from multiple files into a single output.
@@ -126,6 +149,7 @@ pub fn extract_multi(
     output_path: &Path,
     progress: Arc<ExtractProgress>,
     cancelled: Arc<AtomicBool>,
+    append: bool,
 ) -> std::io::Result<ExtractResult> {
     let start = Instant::now();
     let domain = domain.as_bytes();
@@ -141,7 +165,12 @@ pub fn extract_multi(
             fs::create_dir_all(parent)?;
         }
     }
-    let mut out = File::create(output_path)?;
+    let mut out = if append {
+        OpenOptions::new().append(true).create(true).open(output_path)?
+    } else {
+        File::create(output_path)?
+    };
+    let mut seen: HashSet<Vec<u8>> = HashSet::new();
     let mut total_matched = 0usize;
     let mut bytes_done = 0usize;
 
@@ -232,12 +261,15 @@ pub fn extract_multi(
 
         bytes_done += data.len();
         progress.processed.store(bytes_done, Ordering::Relaxed);
-        total_matched += results.len();
 
         for line in &results {
-            out.write_all(line)?;
-            out.write_all(b"\n")?;
+            if seen.insert(line.clone()) {
+                out.write_all(line)?;
+                out.write_all(b"\n")?;
+                total_matched += 1;
+            }
         }
+        progress.matched.store(total_matched, Ordering::Relaxed);
     }
 
     progress.matched.store(total_matched, Ordering::Relaxed);
