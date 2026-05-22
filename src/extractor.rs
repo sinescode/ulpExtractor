@@ -5,7 +5,7 @@ use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 use std::sync::Arc;
 use std::time::Instant;
 
-use memchr::memchr;
+use memchr::{memchr, memrchr};
 use memmap2::Mmap;
 use rayon::prelude::*;
 
@@ -28,6 +28,43 @@ pub struct ExtractResult {
 }
 
 /// Find all files in `dir` matching any of the given extensions.
+
+/// Find `domain` inside `user_part` at a domain boundary. Returns the end
+/// position of the match so the caller can slice the remainder (user:pass).
+/// Handles URLs, emails, and bare domains:
+///   "platform.deepseek.com"  ← subdomain (left boundary: '.')
+///   "https://deepseek.com/login"  ← URL with path (left: '://', right: '/')
+///   "user@deepseek.com"      ← email (left boundary: '@')
+///   "deepseek.com:user"      ← username (right boundary: ':')
+/// Rejects partial-domain matches like "mydeepseek.com" (no boundary before).
+fn domain_end(user_part: &[u8], domain: &[u8]) -> Option<usize> {
+    if domain.is_empty() || user_part.len() < domain.len() {
+        return None;
+    }
+    if user_part == domain {
+        return Some(domain.len());
+    }
+    let d0 = domain[0];
+    let mut start = 0;
+    while let Some(pos) = memchr(d0, &user_part[start..]) {
+        let abs = start + pos;
+        let end = abs + domain.len();
+        start = abs + 1;
+        if end > user_part.len() {
+            continue;
+        }
+        if &user_part[abs..end] != domain {
+            continue;
+        }
+        let left_ok = abs == 0 || matches!(user_part[abs - 1], b'.' | b'@' | b'/' | b':');
+        let right_ok = end >= user_part.len() || matches!(user_part[end], b'/' | b':');
+        if left_ok && right_ok {
+            return Some(end);
+        }
+    }
+    None
+}
+
 pub fn find_files(dir: &Path, extensions: &[String]) -> std::io::Result<Vec<PathBuf>> {
     let exts: Vec<String> = extensions
         .iter()
@@ -171,9 +208,17 @@ pub fn extract_multi(
                             line = &line[..line.len() - 1];
                         }
 
-                        if let Some(div_pos) = memchr(div, line) {
-                            if &line[..div_pos] == domain {
-                                local.push(line[div_pos + 1..].to_vec());
+                        if let Some(div_pos) = memrchr(div, line) {
+                            let user_part = &line[..div_pos];
+                            if let Some(end_pos) = domain_end(user_part, domain) {
+                                let after = &user_part[end_pos..];
+                                // must have user portion: url:user:pass (at least 3 parts)
+                                if let Some(last_colon) = memrchr(div, after) {
+                                    let mut out = after[last_colon + 1..].to_vec();
+                                    out.push(div);
+                                    out.extend_from_slice(&line[div_pos + 1..]);
+                                    local.push(out);
+                                }
                             }
                         }
 

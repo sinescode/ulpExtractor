@@ -1,11 +1,12 @@
 # ulpExtractor
 
-**Fast domain credential extractor** — parse large `domain:user:pass` lists and extract matching credentials by domain.
+**Fast domain credential extractor** — parse large `url:user:pass` lists and extract matching credentials by domain.
 
 Built in Rust with a styled CLI, interactive prompt mode, and multi-file batch scanning.
 
 ## Features
 
+- **Smart domain matching** — boundary-aware, matches subdomains (`www.netflix.com` matches `netflix.com`), URLs (`https://deepseek.com/path:user:pass`), and emails (`user@domain.com`); rejects false positives like `mydeepseek.com`
 - **Styled CLI** — boxed header, colored fields, live progress bar with real-time match counter
 - **Interactive mode** — guided prompts when run with no arguments, same visual design as CLI
 - **Multi-file scan** (`-a`) — scan all files in a directory matching given extensions
@@ -67,14 +68,26 @@ ulpExtractor -d netflix.com -a --dir ./data -o results.txt -t 8
 
 ## Input Format
 
-Each line should be `domain<divider>user<divider>password`:
+Lines use `<url_or_domain><divider><user><divider><password>`. The domain can appear anywhere in the URL portion — bare, as a subdomain, inside an `https://` URL with paths, or in an email:
 
 ```
-fiverr.com:estheticdesigns:Ahmadraza
-google.com:user@gmail.com:password123
+netflix.com:john:secret123
+www.netflix.com:user@mail.com:pass456
+https://platform.deepseek.com/login:admin:pass789
+user@example.com:somepass
 ```
 
-Output is `user<divider>password` for matching lines only.
+Matching is **boundary-aware** — `deepseek.com` matches `platform.deepseek.com` but NOT `mydeepseek.com`.
+
+Output is `user<divider>password` for matching lines only. Lines without a user portion (`domain:pass`) are skipped.
+
+## Upgrade Notes (v0.3.x → v0.4.0)
+
+v0.4.0 introduces **smart domain matching**:
+- **Subdomain matching**: `netflix.com` now matches `www.netflix.com`, `login.netflix.com`, etc.
+- **URL support**: URLs like `https://domain.com/path:user:pass` are parsed correctly
+- **Boundary detection**: `deepseek.com` no longer false-matches `mydeepseek.com`
+- **Output format**: always `user:pass` — lines without a user portion are skipped
 
 ## Build from Source
 
