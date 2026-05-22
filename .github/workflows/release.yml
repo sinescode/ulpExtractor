@@ -171,6 +171,10 @@ jobs:
       - windows-x86_64
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - uses: actions/download-artifact@v4
         with:
           pattern: '*'
@@ -182,29 +186,36 @@ jobs:
           cd dist
           sha256sum *.tar.gz *.zip > checksums.txt
 
+      - name: Get tag message
+        id: tag
+        run: |
+          MSG=$(git tag -l --format='%(contents)' '${{ github.ref_name }}')
+          {
+            echo 'body<<EOTAG'
+            echo "$MSG"
+            echo
+            echo '### Downloads'
+            echo
+            echo '| Platform | File |'
+            echo '|----------|------|'
+            echo '| Linux x86_64 | `ulpExtractor-linux-x86_64.tar.gz` |'
+            echo '| Linux ARM64 | `ulpExtractor-linux-aarch64.tar.gz` |'
+            echo '| macOS (Universal) | `ulpExtractor-macos.tar.gz` |'
+            echo '| Windows x86_64 | `ulpExtractor-windows-x86_64.zip` |'
+            echo
+            echo '### Verify'
+            echo
+            echo '```bash'
+            echo 'sha256sum -c checksums.txt'
+            echo '```'
+            echo EOTAG
+          } >> "$GITHUB_OUTPUT"
+
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           name: ${{ github.ref_name }}
-          body: |
-            ## ${{ github.ref_name }}
-
-            Pre-built binaries for all platforms.
-
-            ### Downloads
-
-            | Platform | File |
-            |----------|------|
-            | Linux x86_64 | `ulpExtractor-linux-x86_64.tar.gz` |
-            | Linux ARM64 | `ulpExtractor-linux-aarch64.tar.gz` |
-            | macOS (Universal) | `ulpExtractor-macos.tar.gz` |
-            | Windows x86_64 | `ulpExtractor-windows-x86_64.zip` |
-
-            ### Verify
-
-            ```bash
-            sha256sum -c checksums.txt
-            ```
+          body: ${{ steps.tag.outputs.body }}
           files: |
             dist/ulpExtractor-linux-x86_64.tar.gz
             dist/ulpExtractor-linux-aarch64.tar.gz
