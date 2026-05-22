@@ -93,23 +93,6 @@ Matching is **boundary-aware** — `deepseek.com` matches `platform.deepseek.com
 
 Output is `user<divider>password` for matching lines only. Lines without a user portion (`domain:pass`) are skipped.
 
-## Upgrade Notes
-
-### v0.4.0 → v0.4.1
-- **Graceful cancel**: Ctrl-C now flushes partial results before exiting
-- **Append mode** (`-A`): append to output instead of overwriting
-- **Recursive scan** (`-r`): scan subdirectories with `-a`
-- **Deduplication**: duplicate `user:pass` pairs written only once
-- **Thread cap**: threads capped at 64 (was unbounded)
-- **Code cleanup**: removed duplicate formatting functions
-
-### v0.3.x → v0.4.0
-v0.4.0 introduces **smart domain matching**:
-- **Subdomain matching**: `netflix.com` now matches `www.netflix.com`, `login.netflix.com`, etc.
-- **URL support**: URLs like `https://domain.com/path:user:pass` are parsed correctly
-- **Boundary detection**: `deepseek.com` no longer false-matches `mydeepseek.com`
-- **Output format**: always `user:pass` — lines without a user portion are skipped
-
 ## Build from Source
 
 Requires Rust **1.70+** (install via [rustup](https://rustup.rs)).
