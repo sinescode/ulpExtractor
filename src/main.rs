@@ -23,34 +23,22 @@ Examples:
   ulpExtractor"
 )]
 struct Args {
-    /// Domain to filter by (first field in each line)
     #[arg(short, long)]
     domain: Option<String>,
-
-    /// Input file path (single-file mode)
     #[arg(short, long)]
     input: Option<PathBuf>,
-
-    /// Output file path
     #[arg(short, long, default_value = "output.txt")]
     output: PathBuf,
-
-    /// Number of threads for parallel processing
     #[arg(short, long, default_value = "4")]
     threads: usize,
-
-    /// Character that separates domain, user, and password
     #[arg(short = 'D', long, default_value = ":")]
     divider: char,
-
     /// Scan all files matching extensions in a directory
     #[arg(short = 'a', long, default_value = "false")]
     all: bool,
-
     /// File extensions to scan (comma-separated). Default: txt
     #[arg(short = 'x', long = "extensions", default_value = "txt", value_delimiter = ',')]
     extensions: Vec<String>,
-
     /// Directory to scan when using --all (defaults to current dir)
     #[arg(long = "dir", default_value = ".")]
     dir: PathBuf,
@@ -72,24 +60,21 @@ fn print_header() {
     let term = Term::stdout();
     let w = term.size().1 as usize;
 
-    let title = " ulpExtractor v0.3.0 ";
-    let subtitle = " Domain credential extractor ";
-
     let top = "┌".to_string() + &"─".repeat(w.saturating_sub(2)) + "┐";
     let bot = "└".to_string() + &"─".repeat(w.saturating_sub(2)) + "┘";
 
-    // Center the title
+    let title = " ulpExtractor v0.3.1 ";
+    let subtitle = " Domain credential extractor ";
+
     let pad = (w.saturating_sub(title.len())) / 2;
     let title_line = "│".to_string()
-        + &" ".repeat(pad)
-        + title
+        + &" ".repeat(pad) + title
         + &" ".repeat(w.saturating_sub(pad + title.len() + 1))
         + "│";
 
     let pad_s = (w.saturating_sub(subtitle.len())) / 2;
     let sub_line = "│".to_string()
-        + &" ".repeat(pad_s)
-        + subtitle
+        + &" ".repeat(pad_s) + subtitle
         + &" ".repeat(w.saturating_sub(pad_s + subtitle.len() + 1))
         + "│";
 
@@ -101,11 +86,7 @@ fn print_header() {
 }
 
 fn print_field(label: &str, value: &str) {
-    println!(
-        "  {} {}",
-        style(format!("{}:", label)).cyan().bold(),
-        style(value).white()
-    );
+    println!("  {} {}", style(format!("{}:", label)).cyan().bold(), style(value).white());
 }
 
 fn print_divider() {
@@ -118,9 +99,7 @@ fn new_progress_bar(total: u64) -> ProgressBar {
     let pb = ProgressBar::new(total);
     pb.set_style(
         ProgressStyle::default_bar()
-            .template(
-                "  {spinner:.cyan} {msg:36} [{bar:30.cyan/blue}] {percent:>3}%  {pos:>10}/{len:10}",
-            )
+            .template("  {spinner:.cyan} {msg:36} [{bar:30.cyan/blue}] {percent:>3}%  {bytes:.dim}/{total_bytes:.dim}")
             .unwrap()
             .progress_chars("━╸─"),
     );
@@ -133,58 +112,19 @@ fn new_progress_bar(total: u64) -> ProgressBar {
 fn cli_mode(args: Args) -> std::io::Result<()> {
     print_header();
 
-    let domain = args.domain.unwrap_or_else(|| {
-        eprintln!("{}", style("Error: --domain is required").red().bold());
-        std::process::exit(1);
-    });
-    let domain = domain.trim().to_string();
-
-    // Determine input files
-    let input_files: Vec<PathBuf> = if args.all {
-        let found = extractor::find_files(&args.dir, &args.extensions)?;
-        if found.is_empty() {
-            eprintln!(
-                "{}",
-                style(format!(
-                    "No files found in '{}' with extensions: {:?}",
-                    args.dir.display(),
-                    args.extensions
-                ))
-                .red()
-            );
+    let domain = match &args.domain {
+        Some(d) => d.trim().to_string(),
+        None => {
+            eprintln!("{}", style("Error: --domain is required").red().bold());
             std::process::exit(1);
-        }
-        found
-    } else {
-        match &args.input {
-            Some(p) => {
-                if !p.exists() {
-                    eprintln!(
-                        "{}",
-                        style(format!("Error: file not found: {}", p.display())).red().bold()
-                    );
-                    std::process::exit(1);
-                }
-                vec![p.clone()]
-            }
-            None => {
-                eprintln!("{}", style("Error: --input or --all is required").red().bold());
-                std::process::exit(1);
-            }
         }
     };
 
+    let input_files: Vec<PathBuf> = resolve_input_files(&args)?;
+
     // Print config
-    let exts_display = args
-        .extensions
-        .iter()
-        .map(|e| {
-            if e.starts_with('.') {
-                e.clone()
-            } else {
-                format!(".{}", e)
-            }
-        })
+    let exts_display = args.extensions.iter()
+        .map(|e| if e.starts_with('.') { e.clone() } else { format!(".{}", e) })
         .collect::<Vec<_>>()
         .join(", ");
 
@@ -192,10 +132,7 @@ fn cli_mode(args: Args) -> std::io::Result<()> {
     if args.all {
         print_field("Mode", &format!("all ({}) — {} files", exts_display, input_files.len()));
         for f in &input_files {
-            println!(
-                "         {}",
-                style(f.file_name().unwrap_or_default().to_string_lossy()).dim()
-            );
+            println!("         {}", style(f.file_name().unwrap_or_default().to_string_lossy()).dim());
         }
     } else {
         print_field("Input", &input_files[0].display().to_string());
@@ -205,93 +142,23 @@ fn cli_mode(args: Args) -> std::io::Result<()> {
     print_field("Divider", &format!("'{}'", args.divider));
     print_divider();
 
-    // Count total lines
-    let total = extractor::count_lines_multi(&input_files)?;
+    // Total size from metadata (instant — no file reading)
+    let total_bytes = extractor::total_bytes(&input_files)?;
     println!(
         "  {} {}",
-        style("Total lines:").cyan(),
-        style(format_number(total as u64)).white().bold()
+        style("Total size:").cyan(),
+        style(format_bytes(total_bytes)).white().bold()
     );
     println!();
 
-    // Run extraction with live progress
-    let pb = new_progress_bar(total as u64);
-    let cancelled = Arc::new(AtomicBool::new(false));
-
-    let progress = Arc::new(extractor::ExtractProgress::new(total));
-    let p_clone = Arc::clone(&progress);
-    let pb_clone = pb.clone();
-
-    // Background thread to update the progress bar
-    std::thread::spawn(move || loop {
-        let p = p_clone.processed.load(std::sync::atomic::Ordering::Relaxed);
-        let m = p_clone.matched.load(std::sync::atomic::Ordering::Relaxed);
-        pb_clone.set_position(p as u64);
-        pb_clone.set_message(format!("Matches found: {}", style_number(m)));
-        if p >= p_clone.total.load(std::sync::atomic::Ordering::Relaxed)
-            && p_clone.total.load(std::sync::atomic::Ordering::Relaxed) > 0
-        {
-            pb_clone.finish_with_message(format!(
-                "Done — {} matches",
-                style_number(m)
-            ));
-            break;
-        }
-        std::thread::sleep(std::time::Duration::from_millis(100));
-    });
-
-    let result = if input_files.len() == 1 {
-        extractor::extract(
-            &input_files[0],
-            &domain,
-            args.divider,
-            args.threads,
-            &args.output,
-            progress,
-            cancelled,
-        )?
-    } else {
-        extractor::extract_multi(
-            &input_files,
-            &domain,
-            args.divider,
-            args.threads,
-            &args.output,
-            progress,
-            cancelled,
-        )?
-    };
-
-    pb.finish_and_clear();
-
-    // Summary
-    println!();
-    println!(
-        "  {}  {} matches from {} lines in {:.1}s",
-        style("✓").green().bold(),
-        style(format_number(result.matched_count as u64)).green().bold(),
-        style(format_number(result.total_lines as u64)).white(),
-        result.duration_ms as f64 / 1000.0
-    );
-    println!(
-        "  {}  {}",
-        style("→").dim(),
-        style(args.output.display().to_string()).dim()
-    );
-    println!();
-
-    Ok(())
+    run_extraction(&input_files, &domain, args.divider, args.threads, &args.output, total_bytes)
 }
 
 // ── Interactive Mode ─────────────────────────────────────────────────────
 
 fn interactive_mode() -> std::io::Result<()> {
     print_header();
-
-    println!(
-        "  {}  Fill in the fields below (press Enter to skip optional)\n",
-        style("?").yellow()
-    );
+    println!("  {}  Fill in the fields below (press Enter to skip optional)\n", style("?").yellow());
 
     let stdin = std::io::stdin();
     let mut reader = BufReader::new(stdin.lock());
@@ -303,67 +170,37 @@ fn interactive_mode() -> std::io::Result<()> {
         let mut s = String::new();
         reader.read_line(&mut s)?;
         let s = s.trim().to_string();
-        if !s.is_empty() {
-            break s;
-        }
-        println!(
-            "  {}",
-            style("  Error: Domain is required").red()
-        );
+        if !s.is_empty() { break s; }
+        println!("  {}", style("  Error: Domain is required").red());
     };
 
-    // Mode: single file or all files
+    // Mode
     print!("  {} [file/all] (default: file): ", style("Mode:").cyan().bold());
     std::io::stdout().flush()?;
     let mut mode = String::new();
     reader.read_line(&mut mode)?;
-    let mode = mode.trim().to_lowercase();
-    let is_all = mode == "all" || mode == "a";
+    let is_all = matches!(mode.trim().to_lowercase().as_str(), "all" | "a");
 
     let input_files: Vec<PathBuf> = if is_all {
-        // Ask for directory
-        print!(
-            "  {} (default: .): ",
-            style("Directory:").cyan().bold()
-        );
+        print!("  {} (default: .): ", style("Directory:").cyan().bold());
         std::io::stdout().flush()?;
         let mut dir_s = String::new();
         reader.read_line(&mut dir_s)?;
-        let dir_s = dir_s.trim().to_string();
-        let dir = if dir_s.is_empty() {
-            PathBuf::from(".")
-        } else {
-            PathBuf::from(&dir_s)
-        };
+        let dir = if dir_s.trim().is_empty() { PathBuf::from(".") } else { PathBuf::from(dir_s.trim()) };
 
-        // Ask for extensions
-        print!(
-            "  {} (comma-separated, default: txt): ",
-            style("Extensions:").cyan().bold()
-        );
+        print!("  {} (comma-separated, default: txt): ", style("Extensions:").cyan().bold());
         std::io::stdout().flush()?;
         let mut exts = String::new();
         reader.read_line(&mut exts)?;
         let exts: Vec<String> = if exts.trim().is_empty() {
             vec!["txt".to_string()]
         } else {
-            exts.trim()
-                .split(',')
-                .map(|s| s.trim().to_string())
-                .collect()
+            exts.trim().split(',').map(|s| s.trim().to_string()).collect()
         };
 
         let found = extractor::find_files(&dir, &exts)?;
         if found.is_empty() {
-            eprintln!(
-                "{}",
-                style(format!(
-                    "No files found in '{}' with extensions: {:?}",
-                    dir.display(),
-                    exts
-                ))
-                .red()
-            );
+            eprintln!("{}", style(format!("No files in '{}' with extensions: {:?}", dir.display(), exts)).red());
             std::process::exit(1);
         }
         found
@@ -379,66 +216,55 @@ fn interactive_mode() -> std::io::Result<()> {
         }
         let p = PathBuf::from(&input_s);
         if !p.exists() {
-            eprintln!(
-                "{}",
-                style(format!("Error: file not found: {}", p.display())).red().bold()
-            );
+            eprintln!("{}", style(format!("Error: file not found: {}", p.display())).red().bold());
             std::process::exit(1);
         }
         vec![p]
     };
 
-    // Output file
-    print!(
-        "  {} (default: output.txt): ",
-        style("Output file:").cyan().bold()
-    );
+    // Output
+    print!("  {} (default: output.txt): ", style("Output file:").cyan().bold());
     std::io::stdout().flush()?;
     let mut output_s = String::new();
     reader.read_line(&mut output_s)?;
-    let output = if output_s.trim().is_empty() {
-        PathBuf::from("output.txt")
-    } else {
-        PathBuf::from(output_s.trim())
-    };
+    let output = if output_s.trim().is_empty() { PathBuf::from("output.txt") } else { PathBuf::from(output_s.trim()) };
 
     // Threads
-    print!(
-        "  {} (default: 4): ",
-        style("Threads:").cyan().bold()
-    );
+    print!("  {} (default: 4): ", style("Threads:").cyan().bold());
     std::io::stdout().flush()?;
     let mut threads_s = String::new();
     reader.read_line(&mut threads_s)?;
     let threads: usize = threads_s.trim().parse().unwrap_or(4).max(1).min(64);
 
     // Divider
-    print!(
-        "  {} (default: :): ",
-        style("Divider:").cyan().bold()
-    );
+    print!("  {} (default: :): ", style("Divider:").cyan().bold());
     std::io::stdout().flush()?;
     let mut divider_s = String::new();
     reader.read_line(&mut divider_s)?;
-    let divider = if divider_s.trim().is_empty() {
-        ':'
-    } else {
-        divider_s.trim().chars().next().unwrap_or(':')
-    };
+    let divider = if divider_s.trim().is_empty() { ':' } else { divider_s.trim().chars().next().unwrap_or(':') };
 
     println!();
     print_divider();
 
-    // Count total lines
-    let total = extractor::count_lines_multi(&input_files)?;
-    println!(
-        "  {} {}",
-        style("Total lines:").cyan(),
-        style(format_number(total as u64)).white().bold()
-    );
+    let total_bytes = extractor::total_bytes(&input_files)?;
+    println!("  {} {}", style("Total size:").cyan(), style(format_bytes(total_bytes)).white().bold());
     println!();
 
-    // Run extraction with live progress
+    run_extraction(&input_files, &domain, divider, threads, &output, total_bytes)
+}
+
+// ── Shared Extraction Runner ─────────────────────────────────────────────
+
+fn run_extraction(
+    input_files: &[PathBuf],
+    domain: &str,
+    divider: char,
+    threads: usize,
+    output_path: &PathBuf,
+    total_bytes: u64,
+) -> std::io::Result<()> {
+    let total = total_bytes as usize;
+
     let pb = new_progress_bar(total as u64);
     let cancelled = Arc::new(AtomicBool::new(false));
 
@@ -446,15 +272,17 @@ fn interactive_mode() -> std::io::Result<()> {
     let p_clone = Arc::clone(&progress);
     let pb_clone = pb.clone();
 
+    // Background thread: poll progress and update bar
     std::thread::spawn(move || loop {
-        let p = p_clone.processed.load(std::sync::atomic::Ordering::Relaxed);
-        let m = p_clone.matched.load(std::sync::atomic::Ordering::Relaxed);
-        pb_clone.set_position(p as u64);
-        pb_clone.set_message(format!("Matches found: {}", style_number(m)));
-        if p >= p_clone.total.load(std::sync::atomic::Ordering::Relaxed)
-            && p_clone.total.load(std::sync::atomic::Ordering::Relaxed) > 0
-        {
-            pb_clone.finish_with_message(format!("Done — {} matches", style_number(m)));
+        let processed = p_clone.processed.load(std::sync::atomic::Ordering::Relaxed);
+        let matched = p_clone.matched.load(std::sync::atomic::Ordering::Relaxed);
+        let tot = p_clone.total.load(std::sync::atomic::Ordering::Relaxed);
+
+        pb_clone.set_position(processed as u64);
+        pb_clone.set_message(format!("Matches: {}", style_number(matched)));
+
+        if processed >= tot && tot > 0 {
+            pb_clone.finish_with_message(format!("Done — {} matches", style_number(matched)));
             break;
         }
         std::thread::sleep(std::time::Duration::from_millis(100));
@@ -462,21 +290,21 @@ fn interactive_mode() -> std::io::Result<()> {
 
     let result = if input_files.len() == 1 {
         extractor::extract(
-            &input_files[0],
-            &domain,
+            input_files[0].as_path(),
+            domain,
             divider,
             threads,
-            &output,
+            output_path,
             progress,
             cancelled,
         )?
     } else {
         extractor::extract_multi(
-            &input_files,
-            &domain,
+            input_files,
+            domain,
             divider,
             threads,
-            &output,
+            output_path,
             progress,
             cancelled,
         )?
@@ -487,23 +315,67 @@ fn interactive_mode() -> std::io::Result<()> {
     // Summary
     println!();
     println!(
-        "  {}  {} matches from {} lines in {:.1}s",
+        "  {}  {} matches from {} across {} file(s) in {:.1}s",
         style("✓").green().bold(),
         style(format_number(result.matched_count as u64)).green().bold(),
-        style(format_number(result.total_lines as u64)).white(),
+        style(format_bytes(result.total_bytes)).white(),
+        input_files.len(),
         result.duration_ms as f64 / 1000.0
     );
     println!(
         "  {}  {}",
         style("→").dim(),
-        style(output.display().to_string()).dim()
+        style(output_path.display().to_string()).dim()
     );
     println!();
 
     Ok(())
 }
 
-// ── Number Formatting ────────────────────────────────────────────────────
+// ── Helpers ──────────────────────────────────────────────────────────────
+
+fn resolve_input_files(args: &Args) -> Result<Vec<PathBuf>, std::io::Error> {
+    if args.all {
+        let found = extractor::find_files(&args.dir, &args.extensions)?;
+        if found.is_empty() {
+            eprintln!("{}", style(format!(
+                "No files found in '{}' with extensions: {:?}",
+                args.dir.display(), args.extensions
+            )).red());
+            std::process::exit(1);
+        }
+        Ok(found)
+    } else {
+        match &args.input {
+            Some(p) => {
+                if !p.exists() {
+                    eprintln!("{}", style(format!("Error: file not found: {}", p.display())).red().bold());
+                    std::process::exit(1);
+                }
+                Ok(vec![p.clone()])
+            }
+            None => {
+                eprintln!("{}", style("Error: --input or --all is required").red().bold());
+                std::process::exit(1);
+            }
+        }
+    }
+}
+
+fn format_bytes(n: u64) -> String {
+    const UNITS: &[&str] = &["B", "KB", "MB", "GB", "TB"];
+    let mut size = n as f64;
+    let mut unit = 0;
+    while size >= 1024.0 && unit < UNITS.len() - 1 {
+        size /= 1024.0;
+        unit += 1;
+    }
+    if unit == 0 {
+        format!("{} B", n)
+    } else {
+        format!("{:.1} {}", size, UNITS[unit])
+    }
+}
 
 fn format_number(n: u64) -> String {
     if n >= 1_000_000 {
