@@ -1,0 +1,9 @@
+[package]
+name = "ulpExtractor"
+version = "0.2.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+ratatui = "0.28"
+crossterm = "0.28"

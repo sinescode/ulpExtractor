@@ -1,0 +1,215 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.*'
+
+permissions:
+  contents: write
+
+jobs:
+  # ── Linux x86_64 (native) ──────────────────────────────────────────
+  linux-x86_64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-unknown-linux-gnu
+
+      - name: Build
+        run: cargo build --release --target x86_64-unknown-linux-gnu
+
+      - name: Strip & compress
+        run: |
+          strip target/x86_64-unknown-linux-gnu/release/ulpExtractor
+          tar -czf ulpExtractor-linux-x86_64.tar.gz \
+            -C target/x86_64-unknown-linux-gnu/release ulpExtractor \
+            -C "${{ github.workspace }}" README.md
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-x86_64
+          path: ulpExtractor-linux-x86_64.tar.gz
+          if-no-files-found: error
+
+  # ── Linux ARM64 (cross-compile) ────────────────────────────────────
+  linux-aarch64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-unknown-linux-gnu
+
+      - name: Install cross-compiler
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y gcc-aarch64-linux-gnu
+
+      - name: Build
+        env:
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: aarch64-linux-gnu-gcc
+        run: cargo build --release --target aarch64-unknown-linux-gnu
+
+      - name: Strip & compress
+        run: |
+          aarch64-linux-gnu-strip target/aarch64-unknown-linux-gnu/release/ulpExtractor
+          tar -czf ulpExtractor-linux-aarch64.tar.gz \
+            -C target/aarch64-unknown-linux-gnu/release ulpExtractor \
+            -C "${{ github.workspace }}" README.md
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-aarch64
+          path: ulpExtractor-linux-aarch64.tar.gz
+          if-no-files-found: error
+
+  # ── macOS (universal: x86_64 + ARM64) ─────────────────────────────
+  macos:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        target:
+          - x86_64-apple-darwin
+          - aarch64-apple-darwin
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Build
+        run: cargo build --release --target ${{ matrix.target }}
+
+      - name: Upload single arch
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-${{ matrix.target }}
+          path: target/${{ matrix.target }}/release/ulpExtractor
+          if-no-files-found: error
+
+  # ── macOS: package both arches together ────────────────────────────
+  macos-bundle:
+    needs: macos
+    runs-on: macos-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: macos-*
+          merge-multiple: true
+          path: bins
+
+      - name: Create universal binary (if both exist)
+        run: |
+          set -e
+          chmod +x bins/ulpExtractor || true
+          if [ -f bins/x86_64-apple-darwin/ulpExtractor ] && [ -f bins/aarch64-apple-darwin/ulpExtractor ]; then
+            mkdir -p bins
+            lipo -create \
+              bins/x86_64-apple-darwin/ulpExtractor \
+              bins/aarch64-apple-darwin/ulpExtractor \
+              -output bins/ulpExtractor
+          elif [ -f bins/ulpExtractor ]; then
+            cp bins/ulpExtractor bins/ulpExtractor-fat
+            mv bins/ulpExtractor-fat bins/ulpExtractor
+          fi
+
+      - name: Package
+        run: tar -czf ulpExtractor-macos.tar.gz -C bins .
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos
+          path: ulpExtractor-macos.tar.gz
+          if-no-files-found: error
+
+  # ── Windows x86_64 ─────────────────────────────────────────────────
+  windows-x86_64:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Build
+        run: cargo build --release --target x86_64-pc-windows-msvc
+
+      - name: Package
+        shell: bash
+        run: |
+          7z a ulpExtractor-windows-x86_64.zip \
+            target/x86_64-pc-windows-msvc/release/ulpExtractor.exe \
+            README.md
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-x86_64
+          path: ulpExtractor-windows-x86_64.zip
+          if-no-files-found: error
+
+  # ── GitHub Release ─────────────────────────────────────────────────
+  release:
+    needs:
+      - linux-x86_64
+      - linux-aarch64
+      - macos-bundle
+      - windows-x86_64
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: '*'
+          merge-multiple: true
+          path: dist
+
+      - name: Checksums
+        run: |
+          cd dist
+          sha256sum *.tar.gz *.zip > checksums.txt
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          body: |
+            ## ${{ github.ref_name }}
+
+            Pre-built binaries for all platforms.
+
+            ### Downloads
+
+            | Platform | File |
+            |----------|------|
+            | Linux x86_64 | `ulpExtractor-linux-x86_64.tar.gz` |
+            | Linux ARM64 | `ulpExtractor-linux-aarch64.tar.gz` |
+            | macOS (Universal) | `ulpExtractor-macos.tar.gz` |
+            | Windows x86_64 | `ulpExtractor-windows-x86_64.zip` |
+
+            ### Verify
+
+            ```bash
+            sha256sum -c checksums.txt
+            ```
+          files: |
+            dist/ulpExtractor-linux-x86_64.tar.gz
+            dist/ulpExtractor-linux-aarch64.tar.gz
+            dist/ulpExtractor-macos.tar.gz
+            dist/ulpExtractor-windows-x86_64.zip
+            dist/checksums.txt
+          draft: false
+          prerelease: false
