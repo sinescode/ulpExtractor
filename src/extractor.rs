@@ -66,6 +66,25 @@ fn domain_end(user_part: &[u8], domain: &[u8]) -> Option<usize> {
     None
 }
 
+/// Trim ASCII whitespace from both ends of a byte slice.
+fn trim_ascii(mut bytes: &[u8]) -> &[u8] {
+    while let Some((first, rest)) = bytes.split_first() {
+        if first.is_ascii_whitespace() {
+            bytes = rest;
+        } else {
+            break;
+        }
+    }
+    while let Some((last, rest)) = bytes.split_last() {
+        if last.is_ascii_whitespace() {
+            bytes = rest;
+        } else {
+            break;
+        }
+    }
+    bytes
+}
+
 pub fn find_files(dir: &Path, extensions: &[String], recursive: bool) -> std::io::Result<Vec<PathBuf>> {
     let exts: Vec<String> = extensions
         .iter()
@@ -241,12 +260,26 @@ pub fn extract_multi(
                             let user_part = &line[..div_pos];
                             if let Some(end_pos) = domain_end(user_part, domain) {
                                 let after = &user_part[end_pos..];
-                                // must have user portion: url:user:pass (at least 3 parts)
                                 if let Some(last_colon) = memrchr(div, after) {
-                                    let mut out = after[last_colon + 1..].to_vec();
-                                    out.push(div);
-                                    out.extend_from_slice(&line[div_pos + 1..]);
-                                    local.push(out);
+                                    // 3-part: url/domain:user:pass
+                                    let user = trim_ascii(&after[last_colon + 1..]);
+                                    let pass = trim_ascii(&line[div_pos + 1..]);
+                                    if !user.is_empty() && !pass.is_empty() {
+                                        let mut out = user.to_vec();
+                                        out.push(div);
+                                        out.extend_from_slice(pass);
+                                        local.push(out);
+                                    }
+                                } else {
+                                    // 2-part: email@domain:pass or domain.com:pass
+                                    let user = trim_ascii(user_part);
+                                    let pass = trim_ascii(&line[div_pos + 1..]);
+                                    if !user.is_empty() && !pass.is_empty() {
+                                        let mut out = user.to_vec();
+                                        out.push(div);
+                                        out.extend_from_slice(pass);
+                                        local.push(out);
+                                    }
                                 }
                             }
                         }

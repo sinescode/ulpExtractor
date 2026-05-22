@@ -69,7 +69,7 @@ fn print_header() {
     let top = "┌".to_string() + &"─".repeat(w.saturating_sub(2)) + "┐";
     let bot = "└".to_string() + &"─".repeat(w.saturating_sub(2)) + "┘";
 
-    let title = " ulpExtractor v0.4.1 ";
+    let title = " ulpExtractor v0.4.2 ";
     let subtitle = " Domain credential extractor ";
 
     let pad = (w.saturating_sub(title.len())) / 2;
