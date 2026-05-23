@@ -1,100 +1,99 @@
-# ulpExtractor
-
 <div align="center">
-  <img src="assets/logo.svg" alt="ulpExtractor" width="600">
+  <img src="assets/logo.svg" alt="ulpExtractor" width="500">
+
+  <br>
+
+  [![Version](https://img.shields.io/badge/version-0.4.3-4ECDC4?style=flat-square&labelColor=1a1a2e)](https://github.com/sinescode/ulpExtractor/releases)
+  [![Rust](https://img.shields.io/badge/rust-1.70+-000000?style=flat-square&logo=rust&logoColor=white&labelColor=1a1a2e)](https://rustup.rs)
+  [![License](https://img.shields.io/badge/license-MIT-FF6B6B?style=flat-square&labelColor=1a1a2e)](LICENSE)
+  [![Stars](https://img.shields.io/github/stars/sinescode/ulpExtractor?style=flat-square&color=FFD43B&labelColor=1a1a2e)](https://github.com/sinescode/ulpExtractor/stargazers)
+
+  <br>
+
+  A high-performance credential extractor that parses massive `url:user:pass` files and extracts matching entries by domain — boundary-aware matching, multi-threaded I/O, zero-copy memory maps.
 </div>
 
-**Fast domain credential extractor** — parse large `url:user:pass` lists and extract matching credentials by domain.
-
-Built in Rust with a styled CLI, interactive prompt mode, and multi-file batch scanning.
+---
 
 ## Features
 
-- **Smart domain matching** — boundary-aware, matches subdomains (`www.netflix.com` matches `netflix.com`), URLs (`https://deepseek.com/path:user:pass`), and emails (`user@domain.com`); rejects false positives like `mydeepseek.com`
-- **Styled CLI** — boxed header, colored fields, live progress bar with real-time match counter
-- **Interactive mode** — guided prompts when run with no arguments, same visual design as CLI
-- **Multi-file scan** (`-a`) — scan all files in a directory matching given extensions
-- **Recursive scan** (`-r`) — recursive directory walk when combined with `-a`
-- **Multi-threaded** — configurable parallel extraction, saturates I/O on any file size
-- **Configurable divider** — works with `:`, `|`, `;`, or any single-character separator
-- **Append mode** (`-A`) — append to output file instead of overwriting
-- **Deduplication** — duplicate `user:pass` pairs are written only once
-- **Graceful cancel** — Ctrl-C flushes partial results to output before exiting
-- **Limit matches** (`-M`) — stop after N matches to prevent memory exhaustion on massive datasets
-- **Quiet mode** (`-q`) — suppress progress bar for scripting and pipes
-- **Cross-platform** — Linux, macOS, Windows pre-built binaries on every release
+| Category | Detail |
+|----------|--------|
+| **Domain matching** | Boundary-aware — catches subdomains, URLs, and emails; rejects false positives |
+| **Performance** | Memory-mapped I/O, rayon parallelism, SIMD-accelerated byte search |
+| **I/O** | Single-file, multi-file batch (`-a`), recursive directory walk (`-r`) |
+| **Output control** | Deduplication, append mode (`-A`), match limit (`-M`), quiet mode (`-q`) |
+| **Formats** | Configurable divider — `:`, `\|`, `;`, or any single-character separator |
+| **UX** | Styled CLI with live progress bar, interactive prompt mode, graceful Ctrl-C |
+| **Platform** | Linux, macOS, Windows — pre-built binaries on every release |
 
 ## Quick Start
 
 ```bash
-# Download the latest binary for your platform from Releases, or build from source:
-git clone https://github.com/sinescode/ulpExtractor.git
-cd ulpExtractor
+# Pre-built binary (recommended)
+curl -LO https://github.com/sinescode/ulpExtractor/releases/latest/download/ulpExtractor-linux-x86_64.tar.gz
+tar xzf ulpExtractor-linux-x86_64.tar.gz
+./ulpExtractor
+
+# Or build from source
+git clone https://github.com/sinescode/ulpExtractor.git && cd ulpExtractor
 cargo build --release
 ./target/release/ulpExtractor
 ```
 
 ## Usage
 
-### Interactive Mode
+### Single File
 
 ```bash
-./ulpExtractor
+ulpExtractor -d netflix.com -i combo.txt
+ulpExtractor -d netflix.com -i combo.txt -o results.txt
+ulpExtractor -d netflix.com -i huge_dump.txt -M 100       # limit to 100 matches
+ulpExtractor -d netflix.com -i combo.txt -q               # no progress bar
 ```
 
-Prompts you for each field with defaults — same styled output as CLI mode.
-
-### CLI — Single File
+### Batch Scan
 
 ```bash
-ulpExtractor -d netflix.com -i combo.txt -o extracted.txt
+ulpExtractor -d netflix.com -a                             # all .txt in current dir
+ulpExtractor -d netflix.com -a -x txt,csv,json              # specific extensions
+ulpExtractor -d netflix.com -a -r                           # recursive
+ulpExtractor -d netflix.com -a --dir ./data -t 8            # custom dir, 8 threads
+ulpExtractor -d netflix.com -i extra.txt -A                 # append to existing output
 ```
 
-### CLI — Multi-File Scan
+### Interactive
 
 ```bash
-# Scan all .txt files in current directory
-ulpExtractor -d netflix.com -a
-
-# Scan specific extensions
-ulpExtractor -d netflix.com -a -x txt,json,csv
-
-# Scan recursively
-ulpExtractor -d netflix.com -a -r
-
-# Scan a different directory
-ulpExtractor -d netflix.com -a --dir ./data -o results.txt -t 8
-
-# Append to existing output
-ulpExtractor -d netflix.com -i combo2.txt -A
-
-# Limit to first 100 matches
-ulpExtractor -d netflix.com -i huge_dump.txt -M 100
-
-# Quiet mode (no progress bar) — pipe friendly
-ulpExtractor -d netflix.com -i combo.txt -o out.txt -q
+ulpExtractor
 ```
 
-### Options
+Guided prompts for domain, input, output, threads, divider — same styled output as CLI.
+
+## Options
 
 | Flag | Description | Default |
-|------|-------------|---------|
-| `-d, --domain` | Domain to match (first field) | required |
-| `-i, --input` | Input file path (single-file mode) | — |
-| `-a, --all` | Scan all files matching extensions | off |
-| `-r, --recursive` | Scan directories recursively (with `-a`) | off |
-| `-x, --extensions` | File extensions to scan, comma-separated | `txt` |
-| `--dir` | Directory to scan when using `-a` | `.` |
+|------|-------------|:------:|
+| `-d, --domain` | Domain to extract credentials for | *required* |
+| `-i, --input` | Input file path | — |
+| `-a, --all` | Scan all files matching extensions in a directory | — |
+| `-r, --recursive` | Walk directories recursively (with `-a`) | — |
+| `-x, --extensions` | File extensions to include (comma-separated) | `txt` |
+| `--dir` | Target directory for `-a` | `.` |
 | `-o, --output` | Output file path | `output.txt` |
-| `-A, --append` | Append to output instead of overwriting | off |
-| `-t, --threads` | Number of threads (capped at 64) | `4` |
+| `-A, --append` | Append to output instead of overwriting | — |
+| `-t, --threads` | Number of worker threads (capped at 64) | `4` |
 | `-D, --divider` | Field separator character | `:` |
 | `-M, --max-matches` | Stop after N matches | unlimited |
-| `-q, --quiet` | Suppress progress bar | off |
+| `-q, --quiet` | Suppress the progress bar | — |
 
 ## Input Format
 
-Lines use `<url_or_domain><divider><user><divider><password>`. The domain can appear anywhere in the URL portion — bare, as a subdomain, inside an `https://` URL with paths, or in an email:
+```
+<url_or_domain><divider><user><divider><password>
+```
+
+The domain may appear as a bare host, subdomain, inside a URL path, or in an email:
 
 ```
 netflix.com:john:secret123
@@ -103,20 +102,17 @@ https://platform.deepseek.com/login:admin:pass789
 user@example.com:somepass
 ```
 
-Matching is **boundary-aware** — `deepseek.com` matches `platform.deepseek.com` but NOT `mydeepseek.com`.
+Matching is **boundary-aware** — `deepseek.com` matches `platform.deepseek.com` but not `mydeepseek.com`. Output is `user<divider>password`, one per line, deduplicated.
 
-Output is `user<divider>password` for matching lines only. Lines without a user portion (`domain:pass`) are skipped.
+## Build
 
-## Build from Source
-
-Requires Rust **1.70+** (install via [rustup](https://rustup.rs)).
+Requires **Rust 1.70+** ([rustup](https://rustup.rs)).
 
 ```bash
 cargo build --release
+# → target/release/ulpExtractor
 ```
 
-Binary lands at `target/release/ulpExtractor`.
+## License
 
-## Contributing
-
-Pull requests, issues, and stars are welcome. Feel free to open an issue for bugs, feature requests, or questions.
+MIT © [Sinescode](https://github.com/sinescode)
