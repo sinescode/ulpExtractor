@@ -6,49 +6,68 @@
      aria-labelledby="icon-title icon-desc">
 
   <title id="icon-title">ulpExtractor</title>
-  <desc id="icon-desc">Extractor gem — a faceted diamond mark representing credential extraction</desc>
+  <desc id="icon-desc">Three-part extraction crystal — faceted gem representing the identifier:user:password parsing pipeline</desc>
 
   <defs>
-    <!-- Icon background -->
+    <!-- Container background -->
     <radialGradient id="bg" cx="50%" cy="30%" r="65%">
-      <stop offset="0%" stop-color="#1A2535"/>
+      <stop offset="0%" stop-color="#162233"/>
       <stop offset="100%" stop-color="#0A0F18"/>
     </radialGradient>
 
-    <!-- Diamond top facet — lighter cyan (light hitting the crown) -->
-    <linearGradient id="gem-top" x1="50%" y1="0%" x2="50%" y2="100%">
+    <!-- Section 1 — identifier (lightest, widest) -->
+    <linearGradient id="s1" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="#00E0FF"/>
-      <stop offset="100%" stop-color="#00B8D8"/>
+      <stop offset="100%" stop-color="#00C4E8"/>
     </linearGradient>
 
-    <!-- Diamond bottom facet — deeper teal -->
-    <linearGradient id="gem-bot" x1="50%" y1="0%" x2="50%" y2="100%">
-      <stop offset="0%" stop-color="#00B8D8"/>
-      <stop offset="100%" stop-color="#006680"/>
+    <!-- Section 2 — user (medium) -->
+    <linearGradient id="s2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#00BAE0"/>
+      <stop offset="100%" stop-color="#0098C0"/>
     </linearGradient>
 
-    <!-- Extraction spark glow -->
-    <radialGradient id="spark" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#FFB347" stop-opacity="1"/>
-      <stop offset="50%" stop-color="#FF6B4A" stop-opacity="0.4"/>
+    <!-- Section 3L — password left facet (medium-dark teal) -->
+    <linearGradient id="s3l" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0088B0"/>
+      <stop offset="100%" stop-color="#006A90"/>
+    </linearGradient>
+
+    <!-- Section 3R — password right facet (darkest) -->
+    <linearGradient id="s3r" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#007098"/>
+      <stop offset="100%" stop-color="#004C6E"/>
+    </linearGradient>
+
+    <!-- Spark glow -->
+    <radialGradient id="spark-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFB347" stop-opacity="0.8"/>
+      <stop offset="40%" stop-color="#FF6B4A" stop-opacity="0.25"/>
       <stop offset="100%" stop-color="#FF6B4A" stop-opacity="0"/>
     </radialGradient>
 
-    <!-- Glass highlight -->
-    <linearGradient id="glass" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#fff" stop-opacity="0.08"/>
-      <stop offset="40%" stop-color="#fff" stop-opacity="0.00"/>
-      <stop offset="100%" stop-color="#000" stop-opacity="0.06"/>
-    </linearGradient>
+    <!-- Spark core -->
+    <radialGradient id="spark-core" cx="40%" cy="35%" r="50%">
+      <stop offset="0%" stop-color="#FFD700"/>
+      <stop offset="60%" stop-color="#FF8C42"/>
+      <stop offset="100%" stop-color="#E8403A"/>
+    </radialGradient>
 
-    <!-- Subtle shadow -->
+    <!-- Glass overlay -->
+    <radialGradient id="glass" cx="50%" cy="25%" r="55%">
+      <stop offset="0%" stop-color="#fff" stop-opacity="0.09"/>
+      <stop offset="45%" stop-color="#fff" stop-opacity="0.00"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.07"/>
+    </radialGradient>
+
+    <!-- Drop shadow -->
     <filter id="shadow" x="-15%" y="-15%" width="130%" height="135%">
-      <feDropShadow dx="0" dy="3" stdDeviation="7" flood-color="#000" flood-opacity="0.4"/>
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.4"/>
     </filter>
 
-    <!-- Spark glow -->
-    <filter id="glow" x="-120%" y="-120%" width="340%" height="340%">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+    <!-- Spark outer glow -->
+    <filter id="glow" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/>
       <feMerge>
         <feMergeNode in="blur"/>
         <feMergeNode in="blur"/>
@@ -61,35 +80,56 @@
   <rect x="24" y="24" width="208" height="208" rx="48" ry="48"
         fill="url(#bg)" filter="url(#shadow)"/>
 
-  <!-- Subtle inner border -->
+  <!-- Subtle border -->
   <rect x="25" y="25" width="206" height="206" rx="47" ry="47"
         fill="none" stroke="#fff" stroke-width="0.5" opacity="0.05"/>
 
-  <!-- === THE GEM === -->
-  <!-- Top facet — light-catching crown -->
-  <!-- Points: top(128,62), right(178,138), left(78,138) -->
-  <path d="M 128,62 L 178,138 L 128,138 L 78,138 Z"
-        fill="url(#gem-top)"/>
+  <!-- ===== THE THREE-PART EXTRACTION CRYSTAL ===== -->
 
-  <!-- Bottom facet — deeper body -->
-  <!-- Points: left(78,138), right(178,138), bottom(128,190) -->
-  <path d="M 78,138 L 178,138 L 128,190 Z"
-        fill="url(#gem-bot)"/>
+  <!-- Section 1 — Identifier (widest band, light cyan) -->
+  <!-- Top: (56,48)→(200,48)  Bottom: (78,96)→(178,96) -->
+  <polygon points="56,48 200,48 178,96 78,96"
+           fill="url(#s1)"/>
 
-  <!-- Facet edge highlight -->
-  <line x1="78" y1="138" x2="178" y2="138"
-        stroke="#fff" stroke-width="0.6" opacity="0.15"/>
+  <!-- Section 2 — User (middle band, medium cyan) -->
+  <!-- Top: (78,96)→(178,96)  Bottom: (92,144)→(164,144) -->
+  <polygon points="78,96 178,96 164,144 92,144"
+           fill="url(#s2)"/>
 
-  <!-- Inner glow behind spark -->
-  <circle cx="128" cy="182" r="18" fill="url(#spark)" opacity="0.5"/>
+  <!-- Section 3L — Password left facet (medium-dark teal) -->
+  <!-- (92,144), (128,144), (128,200) -->
+  <polygon points="92,144 128,144 128,200"
+           fill="url(#s3l)"/>
 
-  <!-- The extraction spark -->
-  <circle cx="128" cy="184" r="5" fill="#FFB347" filter="url(#glow)"/>
+  <!-- Section 3R — Password right facet (darkest teal) -->
+  <!-- (128,144), (164,144), (128,200) -->
+  <polygon points="128,144 164,144 128,200"
+           fill="url(#s3r)"/>
 
-  <!-- Spark highlight -->
-  <circle cx="127" cy="182.5" r="1.8" fill="#fff" opacity="0.6"/>
+  <!-- Divider 1 — first boundary (identifier:user) -->
+  <line x1="78" y1="96" x2="178" y2="96"
+        stroke="#fff" stroke-width="0.7" opacity="0.2"/>
 
-  <!-- Glass overlay -->
+  <!-- Divider 2 — second boundary (user:password) -->
+  <line x1="92" y1="144" x2="164" y2="144"
+        stroke="#fff" stroke-width="0.7" opacity="0.2"/>
+
+  <!-- Vertical facet split (3D pavilion depth) -->
+  <line x1="128" y1="144" x2="128" y2="200"
+        stroke="#fff" stroke-width="0.5" opacity="0.12"/>
+
+  <!-- ===== EXTRACTION SPARK ===== -->
+
+  <!-- Glow field -->
+  <circle cx="128" cy="215" r="14" fill="url(#spark-glow)"/>
+
+  <!-- Spark core -->
+  <circle cx="128" cy="215" r="5" fill="url(#spark-core)" filter="url(#glow)"/>
+
+  <!-- Spark highlight reflection -->
+  <circle cx="126.5" cy="213" r="1.8" fill="#fff" opacity="0.65"/>
+
+  <!-- ===== GLASS FINISH ===== -->
   <rect x="24" y="24" width="208" height="208" rx="48" ry="48" fill="url(#glass)"/>
 
 </svg>
