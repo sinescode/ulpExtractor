@@ -117,27 +117,6 @@ cargo build --release
 
 Binary lands at `target/release/ulpExtractor`.
 
-## Changelog
-
-### v0.4.3
-- `--max-matches` / `-M N` flag — stop after N matches
-- `--quiet` / `-q` flag — suppress progress bar for scripts
-- 64KB `BufWriter` batching — faster output I/O
-- Symlink cycle detection in recursive scan
-- Channel-based progress wake (was 100ms sleep)
-- Unsafe mmap documented with safety rationale
-- 13 unit tests for domain matching logic
-- Version auto-synced from `Cargo.toml`
-
-### v0.4.0
-- Smart domain matching with subdomain, URL, and email support
-- Styled CLI with boxed header and colored fields
-- Interactive prompt mode
-- Multi-file batch scanning with recursive support
-- Multi-threaded extraction with configurable parallelism
-- Custom divider support, append mode, deduplication
-- Graceful Ctrl-C with partial result flushing
-
 ## Contributing
 
 Pull requests, issues, and stars are welcome. Feel free to open an issue for bugs, feature requests, or questions.
