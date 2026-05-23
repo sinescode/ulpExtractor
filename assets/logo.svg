@@ -1,60 +1,125 @@
 <?xml version='1.0' encoding='utf-8'?>
-<svg xmlns="http://www.w3.org/2000/svg" width="540px" height="140px" viewBox="0 0 540 140" role="img" aria-labelledby="logo-title logo-desc"><title id="logo-title">ulpExtractor</title><desc id="logo-desc">Domain credential extractor — high-performance Rust CLI tool for parsing and extracting credentials with boundary-aware matching</desc>
-  <defs><radialGradient id="icon-bg" cx="0.5" cy="0.3" r="0.65" fx="0.45" fy="0.25"><stop offset="0%" stop-color="#162840" /><stop offset="45%" stop-color="#101C2A" /><stop offset="100%" stop-color="#080C14" /></radialGradient><radialGradient id="inner-glow" cx="0.5" cy="0.45" r="0.55"><stop offset="0%" stop-color="#00D4FF" stop-opacity="0.1" /><stop offset="60%" stop-color="#00D4FF" stop-opacity="0.03" /><stop offset="100%" stop-color="#00D4FF" stop-opacity="0" /></radialGradient>
-    <linearGradient id="s1l" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00A8D0" /><stop offset="100%" stop-color="#007898" /></linearGradient>
-    <linearGradient id="s1r" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00D4FF" /><stop offset="100%" stop-color="#00A0C8" /></linearGradient>
-    <linearGradient id="s2l" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#008CB0" /><stop offset="100%" stop-color="#006080" /></linearGradient>
-    <linearGradient id="s2r" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00B8E0" /><stop offset="100%" stop-color="#0088A8" /></linearGradient>
-    <linearGradient id="s3l" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#006E90" /><stop offset="100%" stop-color="#004868" /></linearGradient>
-    <linearGradient id="s3r" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0098C0" /><stop offset="100%" stop-color="#006888" /></linearGradient><radialGradient id="spark-outer" cx="0.5" cy="0.5" r="0.5"><stop offset="0%" stop-color="#FFB347" stop-opacity="0.7" /><stop offset="35%" stop-color="#FF8C42" stop-opacity="0.3" /><stop offset="70%" stop-color="#FF6B6B" stop-opacity="0.06" /><stop offset="100%" stop-color="#FF6B6B" stop-opacity="0" /></radialGradient><radialGradient id="spark-mid" cx="0.5" cy="0.5" r="0.5"><stop offset="0%" stop-color="#FFB347" stop-opacity="0.9" /><stop offset="50%" stop-color="#FF8C42" stop-opacity="0.4" /><stop offset="100%" stop-color="#E8403A" stop-opacity="0" /></radialGradient><radialGradient id="spark-core" cx="0.4" cy="0.35" r="0.5"><stop offset="0%" stop-color="#FFD700" /><stop offset="45%" stop-color="#FFA533" /><stop offset="100%" stop-color="#FF5C3A" /></radialGradient>
-    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff" stop-opacity="0.09" /><stop offset="35%" stop-color="#fff" stop-opacity="0.01" /><stop offset="65%" stop-color="#fff" stop-opacity="0" /><stop offset="100%" stop-color="#000" stop-opacity="0.08" /></linearGradient>
-    <linearGradient id="brand-h" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00D4FF" /><stop offset="100%" stop-color="#0098B0" /></linearGradient><filter id="icon-shadow" x="-30%" y="-30%" width="160%" height="165%"><feDropShadow dx="0" dy="1.5" stdDeviation="3" flood-color="#000" flood-opacity="0.25" /><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.18" /><feDropShadow dx="0" dy="10" stdDeviation="18" flood-color="#000" flood-opacity="0.1" /></filter><filter id="spark-glow" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter><filter id="spark-soft" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter></defs>
-  <g id="icon-mark">
-    <rect fill="#000" opacity="0.2" x="15" y="26" width="92" height="92" rx="22" ry="22" />
-    <rect fill="url(#icon-bg)" x="14" y="24" width="92" height="92" rx="22" ry="22" filter="url(#icon-shadow)" />
-    <rect fill="none" stroke="#fff" stroke-width="0.5" opacity="0.06" x="14.5" y="24.5" width="91" height="91" rx="21.5" ry="21.5" />
-    <circle fill="url(#inner-glow)" cx="60" cy="72" r="36" />
-  <g id="data-bars" opacity="0.8">
-    <rect fill="#00D4FF" opacity="0.3" x="32" y="28" width="56" height="1.8" rx="0.9" ry="0.9" />
-    <rect fill="#00D4FF" opacity="0.2" x="27" y="31" width="66" height="1.8" rx="0.9" ry="0.9" />
-    <rect fill="#00D4FF" opacity="0.25" x="35" y="34" width="50" height="1.8" rx="0.9" ry="0.9" /></g>
-  <g id="crystal">
-    <polygon fill="url(#s1l)" stroke="#00D4FF" stroke-width="0.3" stroke-opacity="0.18" points="27,36 60,36 60,60 37,60" />
-    <polygon fill="url(#s1r)" stroke="#00D4FF" stroke-width="0.3" stroke-opacity="0.18" points="60,36 93,36 83,60 60,60" />
-    <polygon fill="url(#s2l)" stroke="#00D4FF" stroke-width="0.3" stroke-opacity="0.18" points="37,60 60,60 60,84 43,84" />
-    <polygon fill="url(#s2r)" stroke="#00D4FF" stroke-width="0.3" stroke-opacity="0.18" points="60,60 83,60 77,84 60,84" />
-    <polygon fill="url(#s3l)" stroke="#00D4FF" stroke-width="0.3" stroke-opacity="0.18" points="43,84 60,84 60,108" />
-    <polygon fill="url(#s3r)" stroke="#00D4FF" stroke-width="0.3" stroke-opacity="0.18" points="60,84 77,84 60,108" /></g>
-    <line stroke="#fff" stroke-width="0.5" opacity="0.12" x1="37" y1="60" x2="83" y2="60" />
-    <line stroke="#fff" stroke-width="0.5" opacity="0.12" x1="43" y1="84" x2="77" y2="84" />
-    <line stroke="#00D4FF" stroke-width="1.5" opacity="0.06" x1="60" y1="36" x2="60" y2="108" />
-    <line stroke="#fff" stroke-width="0.4" opacity="0.12" x1="60" y1="36" x2="60" y2="108" />
-    <path fill="none" stroke="#00D4FF" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.55" d="M 42,66 L 60,78 L 78,66" />
-    <path fill="none" stroke="#00D4FF" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.35" d="M 46,72 L 60,81 L 74,72" />
-    <polygon fill="#00D4FF" opacity="0.45" points="37,58.5 38.5,60 37,61.5 35.5,60" />
-    <polygon fill="#00D4FF" opacity="0.45" points="83,58.5 84.5,60 83,61.5 81.5,60" />
-    <polygon fill="#00D4FF" opacity="0.45" points="43,82.5 44.5,84 43,85.5 41.5,84" />
-    <polygon fill="#00D4FF" opacity="0.45" points="77,82.5 78.5,84 77,85.5 75.5,84" />
-    <circle fill="#00D4FF" opacity="0.35" cx="46" cy="46" r="0.7" />
-    <circle fill="#00D4FF" opacity="0.28" cx="70" cy="50" r="0.6" />
-    <circle fill="#00D4FF" opacity="0.3" cx="50" cy="68" r="0.7" />
-    <circle fill="#00D4FF" opacity="0.25" cx="68" cy="73" r="0.5" />
-    <circle fill="#00D4FF" opacity="0.28" cx="54" cy="93" r="0.6" />
-    <circle fill="#00D4FF" opacity="0.22" cx="66" cy="98" r="0.5" />
-    <circle fill="url(#spark-outer)" cx="60" cy="114" r="10" filter="url(#spark-soft)" />
-    <circle fill="url(#spark-mid)" cx="60" cy="114" r="5" />
-    <circle fill="url(#spark-core)" cx="60" cy="114" r="2.8" filter="url(#spark-glow)" />
-    <circle fill="#fff" opacity="0.55" cx="59" cy="113" r="1" />
-    <line stroke="#FFD700" stroke-width="0.7" stroke-linecap="round" opacity="0.5" x1="60" y1="110" x2="60" y2="108" />
-    <line stroke="#FFD700" stroke-width="0.7" stroke-linecap="round" opacity="0.5" x1="60" y1="118" x2="60" y2="120" />
-    <line stroke="#FFD700" stroke-width="0.7" stroke-linecap="round" opacity="0.5" x1="56" y1="114" x2="54" y2="114" />
-    <line stroke="#FFD700" stroke-width="0.7" stroke-linecap="round" opacity="0.5" x1="64" y1="114" x2="66" y2="114" />
-    <path fill="none" stroke="#00D4FF" stroke-width="0.8" stroke-linecap="round" opacity="0.18" d="M 22,32 L 22,37 M 22,32 L 27,32" />
-    <path fill="none" stroke="#00D4FF" stroke-width="0.8" stroke-linecap="round" opacity="0.18" d="M 98,32 L 98,37 M 98,32 L 93,32" />
-    <path fill="none" stroke="#00D4FF" stroke-width="0.8" stroke-linecap="round" opacity="0.18" d="M 22,108 L 22,103 M 22,108 L 27,108" />
-    <path fill="none" stroke="#00D4FF" stroke-width="0.8" stroke-linecap="round" opacity="0.18" d="M 98,108 L 98,103 M 98,108 L 93,108" />
-    <rect fill="url(#glass)" x="14" y="24" width="92" height="92" rx="22" ry="22" /></g>
-    <line stroke="url(#brand-h)" stroke-width="0.6" opacity="0.15" x1="124" y1="46" x2="124" y2="94" />
-  <text font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="37" font-weight="800" fill="url(#brand-h)" letter-spacing="-0.5" x="140" y="80">ulpExtractor</text>
-  <text font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="10" font-weight="500" fill="#6B7B8D" letter-spacing="4.5" x="142" y="103">DOMAIN CREDENTIAL EXTRACTOR</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="540" height="140" viewBox="0 0 540 140" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="logo-title logo-desc">
+  <title id="logo-title">ulpExtractor</title>
+  <desc id="logo-desc">ulpExtractor — high-performance Rust CLI for boundary-aware domain credential extraction. Horizontal logo with extraction gate icon and wordmark featuring an integrated three-beam E motif.</desc>
+
+  <defs>
+    <!-- Replicate icon gradients at logo scale -->
+    <radialGradient id="bg" cx="0.5" cy="0.32" r="0.68" fx="0.45" fy="0.25">
+      <stop offset="0%" stop-color="#1A3450" />
+      <stop offset="38%" stop-color="#122438" />
+      <stop offset="100%" stop-color="#060A10" />
+    </radialGradient>
+    <radialGradient id="inner-glow" cx="0.5" cy="0.48" r="0.55">
+      <stop offset="0%" stop-color="#00D4FF" stop-opacity="0.08" />
+      <stop offset="55%" stop-color="#00D4FF" stop-opacity="0.025" />
+      <stop offset="100%" stop-color="#00D4FF" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="bracket" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00D4FF" />
+      <stop offset="85%" stop-color="#00BCD8" />
+      <stop offset="100%" stop-color="#0098B0" />
+    </linearGradient>
+    <linearGradient id="beam" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00D4FF" stop-opacity="0.95" />
+      <stop offset="72%" stop-color="#00D4FF" stop-opacity="0.9" />
+      <stop offset="92%" stop-color="#00C0E0" stop-opacity="0.55" />
+      <stop offset="100%" stop-color="#00B0C8" stop-opacity="0.15" />
+    </linearGradient>
+    <filter id="dot-glow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter id="bracket-glow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="3.5" flood-color="#00D4FF" flood-opacity="0.15" />
+    </filter>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.06" />
+      <stop offset="30%" stop-color="#FFFFFF" stop-opacity="0.012" />
+      <stop offset="70%" stop-color="#000000" stop-opacity="0" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.05" />
+    </linearGradient>
+
+    <!-- E motif gradient — matches bracket treatment for visual cohesion -->
+    <linearGradient id="e-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00D4FF" />
+      <stop offset="90%" stop-color="#00BCD8" />
+      <stop offset="100%" stop-color="#0098B0" />
+    </linearGradient>
+
+    <!-- Typography safe font stack -->
+    <style>
+      <![CDATA[
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800&display=swap');
+        .wordmark-light { font-family: 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-weight: 300; }
+        .wordmark-bold { font-family: 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-weight: 700; }
+        .wordmark-tag  { font-family: 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-weight: 600; }
+      ]]>
+    </style>
+  </defs>
+
+  <g id="logo">
+    <!-- ===== ICON MARK (Left) ===== -->
+    <g transform="translate(18, 26) scale(0.35)">
+      <!-- Badge background -->
+      <rect fill="url(#bg)" x="16" y="16" width="224" height="224" rx="52" ry="52" />
+      <rect fill="none" stroke="#00D4FF" stroke-width="0.6" stroke-opacity="0.06" x="16.5" y="16.5" width="223" height="223" rx="51.5" ry="51.5" />
+      <circle fill="url(#inner-glow)" cx="128" cy="128" r="84" />
+
+      <!-- U-Bracket -->
+      <g filter="url(#bracket-glow)">
+        <path d="M 184 72 L 72 72 L 72 184 L 184 184"
+              fill="none" stroke="url(#bracket)" stroke-width="5.5"
+              stroke-linecap="round" stroke-linejoin="round" />
+      </g>
+
+      <!-- Extraction Beams -->
+      <rect x="82" y="97" width="84" height="10" rx="5" ry="5" fill="url(#beam)" />
+      <rect x="82" y="123" width="106" height="10" rx="5" ry="5" fill="url(#beam)" />
+      <rect x="82" y="149" width="92" height="10" rx="5" ry="5" fill="url(#beam)" />
+
+      <!-- Colon Dots -->
+      <circle cx="196" cy="115" r="4.5" fill="#FFB347" filter="url(#dot-glow)" />
+      <circle cx="196" cy="141" r="4.5" fill="#FFB347" filter="url(#dot-glow)" />
+
+      <!-- Glass highlight -->
+      <rect fill="url(#glass)" x="16" y="16" width="224" height="224" rx="52" ry="52" />
+    </g>
+
+    <!-- ===== VERTICAL DIVIDER ===== -->
+    <line x1="125" y1="36" x2="125" y2="104" stroke="#00D4FF" stroke-width="0.8" stroke-opacity="0.15" stroke-linecap="round" />
+
+    <!-- ===== WORDMARK (Right) ===== -->
+
+    <!-- "ulp" — lightweight lowercase, muted cyan -->
+    <text x="140" y="82" class="wordmark-light" font-size="20" fill="#0098B0" letter-spacing="1.5">ulp</text>
+
+    <!-- Custom "E" — constructed from the three-beam extraction motif with colon dots
+         This directly mirrors the icon's visual language, creating a unified brand mark.
+         The E's three arms represent the three extracted fields (identifier, user, password),
+         and the amber dots in the gaps represent the colon separators. -->
+    <g>
+      <!-- Left backbone of the E -->
+      <rect x="195" y="50" width="6" height="34" rx="2" ry="2" fill="url(#e-grad)" />
+      <!-- Top arm — shortest (identifier) -->
+      <rect x="195" y="52" width="24" height="6" rx="3" ry="3" fill="url(#e-grad)" />
+      <!-- Middle arm — longest (user) -->
+      <rect x="195" y="66" width="34" height="6" rx="3" ry="3" fill="url(#e-grad)" />
+      <!-- Bottom arm — medium (password) -->
+      <rect x="195" y="78" width="28" height="6" rx="3" ry="3" fill="url(#e-grad)" />
+      <!-- Colon dots between the arms -->
+      <circle cx="233" cy="62" r="3" fill="#FFB347" />
+      <circle cx="233" cy="75" r="3" fill="#FFB347" />
+    </g>
+
+    <!-- "xtractor" — bold navy, the weight anchors the wordmark -->
+    <text x="252" y="82" class="wordmark-bold" font-size="24" fill="#142438" letter-spacing="-0.3">xtractor</text>
+
+    <!-- ===== TAGLINE ===== -->
+    <text x="140" y="112" class="wordmark-tag" font-size="9" fill="#6B7B8D" letter-spacing="3.5">BOUNDARY-AWARE CREDENTIAL EXTRACTION</text>
+  </g>
 </svg>

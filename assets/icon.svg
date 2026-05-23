@@ -1,2 +1,125 @@
 <?xml version='1.0' encoding='utf-8'?>
-<svg xmlns="http://www.w3.org/2000/svg" width="256px" height="256px" viewBox="0 0 256 256" role="img" aria-labelledby="icon-title icon-desc"><title id="icon-title">ulpExtractor</title><desc id="icon-desc">Faceted extraction crystal — three-stage identifier:user:password parsing pipeline with boundary-aware precision matching</desc><defs><radialGradient id="bg" cx="0.5" cy="0.3" r="0.65" fx="0.45" fy="0.25"><stop offset="0%" stop-color="#162840" /><stop offset="45%" stop-color="#101C2A" /><stop offset="100%" stop-color="#080C14" /></radialGradient><radialGradient id="inner-glow" cx="0.5" cy="0.45" r="0.55"><stop offset="0%" stop-color="#00D4FF" stop-opacity="0.1" /><stop offset="60%" stop-color="#00D4FF" stop-opacity="0.03" /><stop offset="100%" stop-color="#00D4FF" stop-opacity="0" /></radialGradient><linearGradient id="s1l" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00A8D0" /><stop offset="100%" stop-color="#007898" /></linearGradient><linearGradient id="s1r" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00D4FF" /><stop offset="100%" stop-color="#00A0C8" /></linearGradient><linearGradient id="s2l" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#008CB0" /><stop offset="100%" stop-color="#006080" /></linearGradient><linearGradient id="s2r" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00B8E0" /><stop offset="100%" stop-color="#0088A8" /></linearGradient><linearGradient id="s3l" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#006E90" /><stop offset="100%" stop-color="#004868" /></linearGradient><linearGradient id="s3r" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0098C0" /><stop offset="100%" stop-color="#006888" /></linearGradient><radialGradient id="spark-outer" cx="0.5" cy="0.5" r="0.5"><stop offset="0%" stop-color="#FFB347" stop-opacity="0.7" /><stop offset="35%" stop-color="#FF8C42" stop-opacity="0.3" /><stop offset="70%" stop-color="#FF6B6B" stop-opacity="0.06" /><stop offset="100%" stop-color="#FF6B6B" stop-opacity="0" /></radialGradient><radialGradient id="spark-mid" cx="0.5" cy="0.5" r="0.5"><stop offset="0%" stop-color="#FFB347" stop-opacity="0.9" /><stop offset="50%" stop-color="#FF8C42" stop-opacity="0.4" /><stop offset="100%" stop-color="#E8403A" stop-opacity="0" /></radialGradient><radialGradient id="spark-core" cx="0.4" cy="0.35" r="0.5"><stop offset="0%" stop-color="#FFD700" /><stop offset="45%" stop-color="#FFA533" /><stop offset="100%" stop-color="#FF5C3A" /></radialGradient><linearGradient id="glass" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff" stop-opacity="0.09" /><stop offset="35%" stop-color="#fff" stop-opacity="0.01" /><stop offset="65%" stop-color="#fff" stop-opacity="0" /><stop offset="100%" stop-color="#000" stop-opacity="0.08" /></linearGradient><filter id="shadow" x="-25%" y="-25%" width="150%" height="155%"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.25" /><feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#000" flood-opacity="0.18" /><feDropShadow dx="0" dy="16" stdDeviation="28" flood-color="#000" flood-opacity="0.1" /></filter><filter id="spark-glow" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter><filter id="spark-soft" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter></defs><g id="icon"><rect fill="#000" opacity="0.2" x="26" y="28" width="208" height="208" rx="48" ry="48" /><rect fill="url(#bg)" x="24" y="24" width="208" height="208" rx="48" ry="48" filter="url(#shadow)" /><rect fill="none" stroke="#fff" stroke-width="0.5" opacity="0.06" x="24.5" y="24.5" width="207" height="207" rx="47.5" ry="47.5" /><circle fill="url(#inner-glow)" cx="128" cy="124" r="72" /><g id="data-bars" opacity="0.8"><rect fill="#00D4FF" opacity="0.3" x="60" y="38" width="136" height="2.5" rx="1.25" ry="1.25" /><rect fill="#00D4FF" opacity="0.2" x="50" y="43.5" width="156" height="2.5" rx="1.25" ry="1.25" /><rect fill="#00D4FF" opacity="0.25" x="68" y="49" width="120" height="2.5" rx="1.25" ry="1.25" /></g><g id="crystal"><polygon fill="url(#s1l)" stroke="#00D4FF" stroke-width="0.4" stroke-opacity="0.18" points="56,56 128,56 128,98 78,98" /><polygon fill="url(#s1r)" stroke="#00D4FF" stroke-width="0.4" stroke-opacity="0.18" points="128,56 200,56 178,98 128,98" /><polygon fill="url(#s2l)" stroke="#00D4FF" stroke-width="0.4" stroke-opacity="0.18" points="78,98 128,98 128,144 92,144" /><polygon fill="url(#s2r)" stroke="#00D4FF" stroke-width="0.4" stroke-opacity="0.18" points="128,98 178,98 164,144 128,144" /><polygon fill="url(#s3l)" stroke="#00D4FF" stroke-width="0.4" stroke-opacity="0.18" points="92,144 128,144 128,192" /><polygon fill="url(#s3r)" stroke="#00D4FF" stroke-width="0.4" stroke-opacity="0.18" points="128,144 164,144 128,192" /></g><line stroke="#fff" stroke-width="0.6" opacity="0.12" x1="78" y1="98" x2="178" y2="98" /><line stroke="#fff" stroke-width="0.6" opacity="0.12" x1="92" y1="144" x2="164" y2="144" /><line stroke="#00D4FF" stroke-width="2" opacity="0.06" x1="128" y1="56" x2="128" y2="192" /><line stroke="#fff" stroke-width="0.6" opacity="0.12" x1="128" y1="56" x2="128" y2="192" /><path fill="none" stroke="#00D4FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.55" d="M 88,108 L 128,132 L 168,108" /><path fill="none" stroke="#00D4FF" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" opacity="0.35" d="M 96,118 L 128,138 L 160,118" /><polygon fill="#00D4FF" opacity="0.45" points="78,95.5 80.5,98 78,100.5 75.5,98" /><polygon fill="#00D4FF" opacity="0.45" points="178,95.5 180.5,98 178,100.5 175.5,98" /><polygon fill="#00D4FF" opacity="0.45" points="92,141.5 94.5,144 92,146.5 89.5,144" /><polygon fill="#00D4FF" opacity="0.45" points="164,141.5 166.5,144 164,146.5 161.5,144" /><circle fill="#00D4FF" opacity="0.35" cx="102" cy="74" r="1.1" /><circle fill="#00D4FF" opacity="0.28" cx="148" cy="80" r="0.9" /><circle fill="#00D4FF" opacity="0.3" cx="112" cy="115" r="1" /><circle fill="#00D4FF" opacity="0.25" cx="142" cy="122" r="0.8" /><circle fill="#00D4FF" opacity="0.28" cx="120" cy="162" r="1" /><circle fill="#00D4FF" opacity="0.22" cx="136" cy="170" r="0.8" /><circle fill="url(#spark-outer)" cx="128" cy="208" r="18" filter="url(#spark-soft)" /><circle fill="url(#spark-mid)" cx="128" cy="208" r="8" /><circle fill="url(#spark-core)" cx="128" cy="208" r="4.5" filter="url(#spark-glow)" /><circle fill="#fff" opacity="0.55" cx="126.5" cy="206" r="1.6" /><line stroke="#FFD700" stroke-width="1" stroke-linecap="round" opacity="0.5" x1="128" y1="200.5" x2="128" y2="197" /><line stroke="#FFD700" stroke-width="1" stroke-linecap="round" opacity="0.5" x1="128" y1="215.5" x2="128" y2="219" /><line stroke="#FFD700" stroke-width="1" stroke-linecap="round" opacity="0.5" x1="120.5" y1="208" x2="117" y2="208" /><line stroke="#FFD700" stroke-width="1" stroke-linecap="round" opacity="0.5" x1="135.5" y1="208" x2="139" y2="208" /><path fill="none" stroke="#00D4FF" stroke-width="1" stroke-linecap="round" opacity="0.18" d="M 36,36 L 36,44 M 36,36 L 44,36" /><path fill="none" stroke="#00D4FF" stroke-width="1" stroke-linecap="round" opacity="0.18" d="M 220,36 L 220,44 M 220,36 L 212,36" /><path fill="none" stroke="#00D4FF" stroke-width="1" stroke-linecap="round" opacity="0.18" d="M 36,220 L 36,212 M 36,220 L 44,220" /><path fill="none" stroke="#00D4FF" stroke-width="1" stroke-linecap="round" opacity="0.18" d="M 220,220 L 220,212 M 220,220 L 212,220" /><rect fill="url(#glass)" x="24" y="24" width="208" height="208" rx="48" ry="48" /></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="icon-title icon-desc">
+  <title id="icon-title">ulpExtractor</title>
+  <desc id="icon-desc">Extraction gate icon — boundary-aware domain_end() matching for identifier:user:password credential parsing. A U-shaped boundary bracket with three graduated extraction beams and amber colon separators.</desc>
+
+  <defs>
+    <!-- Deep navy background — radiates from slightly above center for a natural lighting effect -->
+    <radialGradient id="bg" cx="0.5" cy="0.32" r="0.68" fx="0.45" fy="0.25">
+      <stop offset="0%" stop-color="#1A3450" />
+      <stop offset="38%" stop-color="#122438" />
+      <stop offset="100%" stop-color="#060A10" />
+    </radialGradient>
+
+    <!-- Ambient inner glow — soft cyan light from within the badge -->
+    <radialGradient id="inner-glow" cx="0.5" cy="0.48" r="0.55">
+      <stop offset="0%" stop-color="#00D4FF" stop-opacity="0.08" />
+      <stop offset="55%" stop-color="#00D4FF" stop-opacity="0.025" />
+      <stop offset="100%" stop-color="#00D4FF" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Bracket gradient — electric cyan with deeper right edge for depth -->
+    <linearGradient id="bracket" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00D4FF" />
+      <stop offset="85%" stop-color="#00BCD8" />
+      <stop offset="100%" stop-color="#0098B0" />
+    </linearGradient>
+
+    <!-- Extraction beam gradient — bright left origin fading toward the extraction point -->
+    <linearGradient id="beam" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00D4FF" stop-opacity="0.95" />
+      <stop offset="72%" stop-color="#00D4FF" stop-opacity="0.9" />
+      <stop offset="92%" stop-color="#00C0E0" stop-opacity="0.55" />
+      <stop offset="100%" stop-color="#00B0C8" stop-opacity="0.15" />
+    </linearGradient>
+
+    <!-- Colon dot glow — soft amber radiance -->
+    <filter id="dot-glow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Bracket cyan lift — very faint glow under the bracket -->
+    <filter id="bracket-glow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="2" stdDeviation="5" flood-color="#00D4FF" flood-opacity="0.18" />
+    </filter>
+
+    <!-- Outer badge shadow — multi-layer for premium depth -->
+    <filter id="outer-shadow" x="-30%" y="-30%" width="160%" height="165%">
+      <feDropShadow dx="0" dy="2" stdDeviation="5" flood-color="#000" flood-opacity="0.35" />
+      <feDropShadow dx="0" dy="8" stdDeviation="18" flood-color="#000" flood-opacity="0.18" />
+    </filter>
+
+    <!-- Glass highlight overlay — top-down sheen -->
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.07" />
+      <stop offset="30%" stop-color="#FFFFFF" stop-opacity="0.015" />
+      <stop offset="70%" stop-color="#000000" stop-opacity="0" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.06" />
+    </linearGradient>
+  </defs>
+
+  <g id="icon">
+    <!-- Badge background with depth -->
+    <rect fill="#000000" opacity="0.18" x="18" y="20" width="220" height="220" rx="52" ry="52" />
+    <rect fill="url(#bg)" x="16" y="16" width="224" height="224" rx="52" ry="52" filter="url(#outer-shadow)" />
+    <rect fill="none" stroke="#00D4FF" stroke-width="0.6" stroke-opacity="0.06" x="16.5" y="16.5" width="223" height="223" rx="51.5" ry="51.5" />
+
+    <!-- Interior ambient light -->
+    <circle fill="url(#inner-glow)" cx="128" cy="128" r="84" />
+
+    <!-- ===== BOUNDARY GATE (U-Bracket) ===== -->
+    <!-- Open on the right: represents domain_end() validating boundary characters
+         Three-sided path with rounded joins at corners and rounded open ends -->
+    <g filter="url(#bracket-glow)">
+      <path d="M 184 72 L 72 72 L 72 184 L 184 184"
+            fill="none" stroke="url(#bracket)" stroke-width="5.5"
+            stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+
+    <!-- ===== EXTRACTION BEAMS ===== -->
+    <!-- Three graduated horizontal bars inside the bracket, representing
+         the three extracted fields: identifier, user, password.
+         Different lengths = different extracted data sizes.
+         Right-end fade suggests data flowing past the visible extraction point. -->
+
+    <!-- Beam 1 (top) — identifier/source -->
+    <rect x="82" y="97" width="84" height="10" rx="5" ry="5" fill="url(#beam)" />
+
+    <!-- Beam 2 (middle) — user (longest, primary extraction target) -->
+    <rect x="82" y="123" width="106" height="10" rx="5" ry="5" fill="url(#beam)" />
+
+    <!-- Beam 3 (bottom) — password -->
+    <rect x="82" y="149" width="92" height="10" rx="5" ry="5" fill="url(#beam)" />
+
+    <!-- ===== COLON SEPARATORS ===== -->
+    <!-- Two amber dots in the gaps between beams, positioned past the bracket opening.
+         Each dot represents a ':' separator between identifier:user:password.
+         Their position outside the bracket signifies the point where extracted data
+         passes through the boundary into structured output. -->
+
+    <circle cx="196" cy="115" r="4.5" fill="#FFB347" filter="url(#dot-glow)" />
+    <circle cx="196" cy="141" r="4.5" fill="#FFB347" filter="url(#dot-glow)" />
+
+    <!-- ===== SUBTLE CORNER ANCHORS ===== -->
+    <!-- Micro detail: tiny corner markers referencing the four boundary characters
+         (. @ / :) that domain_end() checks. Nearly invisible but adds algorithmic depth. -->
+    <g stroke="#00D4FF" stroke-width="1.2" stroke-linecap="round" opacity="0.12">
+      <!-- Top-left: '.' reference -->
+      <path d="M 69 74 L 69 80 M 69 74 L 75 74" />
+      <!-- Top-right: '/' reference -->
+      <path d="M 182 69 L 188 69 M 187 69 L 187 75" />
+      <!-- Bottom-left: '@' reference -->
+      <path d="M 69 182 L 69 188 M 69 188 L 75 188" />
+      <!-- Bottom-right: ':' reference -->
+      <path d="M 187 182 L 187 188 M 182 187 L 188 187" />
+    </g>
+
+    <!-- Glass highlight overlay -->
+    <rect fill="url(#glass)" x="16" y="16" width="224" height="224" rx="52" ry="52" />
+  </g>
+</svg>
