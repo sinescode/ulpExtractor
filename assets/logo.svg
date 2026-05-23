@@ -6,104 +6,163 @@
      aria-labelledby="logo-title logo-desc">
 
   <title id="logo-title">ulpExtractor</title>
-  <desc id="logo-desc">Domain credential extractor tool logo — abstract filter funnel icon with wordmark</desc>
+  <desc id="logo-desc">Domain credential extractor — high-performance Rust CLI tool for parsing and extracting credentials</desc>
 
   <defs>
-    <!-- Primary brand gradient — cyan-to-teal -->
+    <!-- Brand gradient: electric cyan -->
     <linearGradient id="brand" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#4ECDC4"/>
-      <stop offset="100%" stop-color="#2D8A82"/>
+      <stop offset="0%" stop-color="#00D4FF"/>
+      <stop offset="50%" stop-color="#00B8D8"/>
+      <stop offset="100%" stop-color="#0098B0"/>
     </linearGradient>
 
-    <!-- Accent warm gradient for the extracted/downstream element -->
+    <!-- Brand horizontal for wordmark -->
+    <linearGradient id="brand-h" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00D4FF"/>
+      <stop offset="100%" stop-color="#0098B0"/>
+    </linearGradient>
+
+    <!-- Accent: warm amber/coral for the output node -->
     <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FF6B6B"/>
-      <stop offset="100%" stop-color="#FF8E53"/>
+      <stop offset="0%" stop-color="#FFB347"/>
+      <stop offset="100%" stop-color="#FF6B6B"/>
     </linearGradient>
 
-    <!-- Surface gradient for icon background -->
-    <radialGradient id="icon-bg" cx="50%" cy="40%" r="55%">
-      <stop offset="0%" stop-color="#1E2A3A"/>
-      <stop offset="100%" stop-color="#0D1117"/>
+    <!-- Icon background: deep navy -->
+    <radialGradient id="icon-bg" cx="50%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#162435"/>
+      <stop offset="100%" stop-color="#0A1018"/>
+    </radialGradient>
+
+    <!-- Inner glow behind the extraction point -->
+    <radialGradient id="core-glow" cx="50%" cy="72%" r="30%">
+      <stop offset="0%" stop-color="#00D4FF" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#00D4FF" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Output node glow -->
+    <radialGradient id="output-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFB347" stop-opacity="0.6"/>
+      <stop offset="40%" stop-color="#FF6B6B" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#FF6B6B" stop-opacity="0"/>
     </radialGradient>
 
     <!-- Glass highlight overlay -->
-    <linearGradient id="shine" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#fff" stop-opacity="0.12"/>
-      <stop offset="30%" stop-color="#fff" stop-opacity="0.00"/>
-      <stop offset="100%" stop-color="#000" stop-opacity="0.08"/>
+    <linearGradient id="glass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fff" stop-opacity="0.10"/>
+      <stop offset="40%" stop-color="#fff" stop-opacity="0.00"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.06"/>
     </linearGradient>
 
     <!-- Crisp drop shadow -->
     <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.25"/>
+      <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#000" flood-opacity="0.35"/>
     </filter>
 
-    <!-- Subtle glow on the output node -->
-    <filter id="output-glow" x="-80%" y="-80%" width="260%" height="260%">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+    <!-- Output node glow filter -->
+    <filter id="glow" x="-200%" y="-200%" width="500%" height="500%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur"/>
       <feMerge>
+        <feMergeNode in="blur"/>
         <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
 
-    <!-- Funnel / extractor icon symbol -->
-    <symbol id="funnel" viewBox="0 0 80 80">
-      <!-- Outer pill / squircle container -->
-      <rect x="2" y="2" width="76" height="76" rx="18" ry="18" fill="url(#icon-bg)" filter="url(#shadow)"/>
-
-      <!-- Entry slots (top) — data flowing in -->
-      <rect x="20" y="13" width="40" height="4" rx="2" fill="url(#brand)" opacity="0.35"/>
-      <rect x="15" y="21" width="50" height="4" rx="2" fill="url(#brand)" opacity="0.25"/>
-      <rect x="22" y="29" width="36" height="4" rx="2" fill="url(#brand)" opacity="0.30"/>
-
-      <!-- Funnel body — trapezoid narrowing down -->
-      <path d="M 15,37 L 65,37 L 52,62 L 28,62 Z"
-            fill="url(#brand)" opacity="0.15"/>
-
-      <!-- Funnel inner channel -->
-      <path d="M 25,37 L 55,37 L 46,60 L 34,60 Z"
-            fill="url(#brand)" opacity="0.35"/>
-
-      <!-- Chevron / filter mark inside funnel -->
-      <path d="M 35,44 L 40,50 L 45,44"
-            fill="none" stroke="url(#brand)" stroke-width="2.5"
-            stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
-      <line x1="33" y1="50" x2="47" y2="50"
-            stroke="url(#brand)" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-
-      <!-- Output node — single extracted result -->
-      <circle cx="40" cy="71" r="5" fill="url(#accent)" filter="url(#output-glow)"/>
-
-      <!-- Glass overlay -->
-      <rect x="2" y="2" width="76" height="76" rx="18" ry="18" fill="url(#shine)"/>
-    </symbol>
+    <!-- Subtle emboss on the funnel -->
+    <filter id="funnel-emboss" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="alpha-blur"/>
+      <feSpecularLighting in="alpha-blur" surfaceScale="2" specularConstant="0.5" specularExponent="20" result="spec">
+        <fePointLight x="50" y="20" z="100"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="SourceAlpha" operator="in" result="spec-in"/>
+      <feComposite in="SourceGraphic" in2="spec-in" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"/>
+    </filter>
   </defs>
 
-  <!-- === LAYOUT: Icon (left) + Wordmark (right) === -->
+  <!-- ===== ICON MARK (100×100, positioned at x=10, y=20) ===== -->
 
-  <!-- Icon -->
-  <use href="#funnel" x="10" y="30" width="80" height="80"/>
+  <!-- Outer squircle container -->
+  <rect x="14" y="24" width="92" height="92" rx="22" ry="22"
+        fill="url(#icon-bg)" filter="url(#shadow)"/>
 
-  <!-- Divider -->
-  <line x1="108" y1="48" x2="108" y2="92" stroke="url(#brand)" stroke-width="0.75" opacity="0.2"/>
+  <!-- Subtle border -->
+  <rect x="14" y="24" width="92" height="92" rx="22" ry="22"
+        fill="none" stroke="#fff" stroke-width="0.5" opacity="0.08"/>
 
-  <!-- Wordmark -->
-  <text x="124" y="78"
+  <!-- Core glow behind extraction area -->
+  <circle cx="60" cy="96" r="22" fill="url(#core-glow)"/>
+
+  <!-- Data input bars (top) — staggered widths representing url:user:pass -->
+  <rect x="34" y="38" width="52" height="3" rx="1.5" fill="url(#brand)" opacity="0.30"/>
+  <rect x="30" y="44" width="60" height="3" rx="1.5" fill="url(#brand)" opacity="0.22"/>
+  <rect x="37" y="50" width="46" height="3" rx="1.5" fill="url(#brand)" opacity="0.28"/>
+  <rect x="33" y="56" width="54" height="3" rx="1.5" fill="url(#brand)" opacity="0.18"/>
+
+  <!-- Extraction funnel — trapezoid narrowing from data to output -->
+  <path d="M 28,62 L 92,62 L 74,90 L 46,90 Z"
+        fill="url(#brand)" opacity="0.10"/>
+
+  <!-- Funnel inner channel — brighter core -->
+  <path d="M 36,62 L 84,62 L 70,88 L 50,88 Z"
+        fill="url(#brand)" opacity="0.22"/>
+
+  <!-- Funnel core — the tightest channel -->
+  <path d="M 42,62 L 78,62 L 66,86 L 54,86 Z"
+        fill="url(#brand)" opacity="0.35"/>
+
+  <!-- Left funnel wall accent line -->
+  <line x1="28" y1="62" x2="46" y2="90" stroke="url(#brand)" stroke-width="1" opacity="0.5"/>
+  <!-- Right funnel wall accent line -->
+  <line x1="92" y1="62" x2="74" y2="90" stroke="url(#brand)" stroke-width="1" opacity="0.5"/>
+
+  <!-- Filter chevrons — nested V shapes suggesting precision filtering -->
+  <path d="M 44,68 L 60,78 L 76,68"
+        fill="none" stroke="url(#brand)" stroke-width="1.8"
+        stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+  <path d="M 48,73 L 60,81 L 72,73"
+        fill="none" stroke="url(#brand)" stroke-width="1.4"
+        stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+
+  <!-- Center axis line -->
+  <line x1="60" y1="82" x2="60" y2="96" stroke="url(#brand)" stroke-width="0.8" opacity="0.3" stroke-dasharray="2,3"/>
+
+  <!-- Output node glow field -->
+  <circle cx="60" cy="102" r="10" fill="url(#output-glow)"/>
+
+  <!-- Output node — the extracted result -->
+  <circle cx="60" cy="102" r="4.5" fill="url(#accent)" filter="url(#glow)"/>
+
+  <!-- Output node inner highlight -->
+  <circle cx="59" cy="101" r="1.5" fill="#fff" opacity="0.4"/>
+
+  <!-- Corner accents — precision instrument feel -->
+  <path d="M 24,34 L 24,40 M 24,34 L 30,34" stroke="url(#brand)" stroke-width="1" opacity="0.25" fill="none" stroke-linecap="round"/>
+  <path d="M 96,34 L 96,40 M 96,34 L 90,34" stroke="url(#brand)" stroke-width="1" opacity="0.25" fill="none" stroke-linecap="round"/>
+  <path d="M 24,106 L 24,100 M 24,106 L 30,106" stroke="url(#brand)" stroke-width="1" opacity="0.25" fill="none" stroke-linecap="round"/>
+  <path d="M 96,106 L 96,100 M 96,106 L 90,106" stroke="url(#brand)" stroke-width="1" opacity="0.25" fill="none" stroke-linecap="round"/>
+
+  <!-- Glass overlay -->
+  <rect x="14" y="24" width="92" height="92" rx="22" ry="22" fill="url(#glass)"/>
+
+  <!-- ===== DIVIDER ===== -->
+  <line x1="124" y1="46" x2="124" y2="94" stroke="url(#brand)" stroke-width="0.6" opacity="0.18"/>
+
+  <!-- ===== WORDMARK ===== -->
+  <text x="140" y="80"
         font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
-        font-size="36" font-weight="800"
-        fill="url(#brand)"
+        font-size="37" font-weight="800"
+        fill="url(#brand-h)"
         letter-spacing="-0.5">
     ulpExtractor
   </text>
 
   <!-- Tagline -->
-  <text x="126" y="100"
+  <text x="142" y="103"
         font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
-        font-size="10.5" font-weight="400"
-        fill="#8B949E"
-        letter-spacing="3.5">
+        font-size="10" font-weight="500"
+        fill="#6B7B8D"
+        letter-spacing="4.5">
     DOMAIN CREDENTIAL EXTRACTOR
   </text>
 
