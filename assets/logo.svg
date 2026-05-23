@@ -1,18 +1,110 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 80" width="400" height="80">
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     viewBox="0 0 540 140"
+     width="540" height="140"
+     role="img"
+     aria-labelledby="logo-title logo-desc">
+
+  <title id="logo-title">ulpExtractor</title>
+  <desc id="logo-desc">Domain credential extractor tool logo — abstract filter funnel icon with wordmark</desc>
+
   <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="0%">
+    <!-- Primary brand gradient — cyan-to-teal -->
+    <linearGradient id="brand" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#4ECDC4"/>
-      <stop offset="100%" stop-color="#6EE7DE"/>
+      <stop offset="100%" stop-color="#2D8A82"/>
     </linearGradient>
+
+    <!-- Accent warm gradient for the extracted/downstream element -->
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF6B6B"/>
+      <stop offset="100%" stop-color="#FF8E53"/>
+    </linearGradient>
+
+    <!-- Surface gradient for icon background -->
+    <radialGradient id="icon-bg" cx="50%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#1E2A3A"/>
+      <stop offset="100%" stop-color="#0D1117"/>
+    </radialGradient>
+
+    <!-- Glass highlight overlay -->
+    <linearGradient id="shine" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fff" stop-opacity="0.12"/>
+      <stop offset="30%" stop-color="#fff" stop-opacity="0.00"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.08"/>
+    </linearGradient>
+
+    <!-- Crisp drop shadow -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
+
+    <!-- Subtle glow on the output node -->
+    <filter id="output-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Funnel / extractor icon symbol -->
+    <symbol id="funnel" viewBox="0 0 80 80">
+      <!-- Outer pill / squircle container -->
+      <rect x="2" y="2" width="76" height="76" rx="18" ry="18" fill="url(#icon-bg)" filter="url(#shadow)"/>
+
+      <!-- Entry slots (top) — data flowing in -->
+      <rect x="20" y="13" width="40" height="4" rx="2" fill="url(#brand)" opacity="0.35"/>
+      <rect x="15" y="21" width="50" height="4" rx="2" fill="url(#brand)" opacity="0.25"/>
+      <rect x="22" y="29" width="36" height="4" rx="2" fill="url(#brand)" opacity="0.30"/>
+
+      <!-- Funnel body — trapezoid narrowing down -->
+      <path d="M 15,37 L 65,37 L 52,62 L 28,62 Z"
+            fill="url(#brand)" opacity="0.15"/>
+
+      <!-- Funnel inner channel -->
+      <path d="M 25,37 L 55,37 L 46,60 L 34,60 Z"
+            fill="url(#brand)" opacity="0.35"/>
+
+      <!-- Chevron / filter mark inside funnel -->
+      <path d="M 35,44 L 40,50 L 45,44"
+            fill="none" stroke="url(#brand)" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+      <line x1="33" y1="50" x2="47" y2="50"
+            stroke="url(#brand)" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+
+      <!-- Output node — single extracted result -->
+      <circle cx="40" cy="71" r="5" fill="url(#accent)" filter="url(#output-glow)"/>
+
+      <!-- Glass overlay -->
+      <rect x="2" y="2" width="76" height="76" rx="18" ry="18" fill="url(#shine)"/>
+    </symbol>
   </defs>
 
-  <!-- Icon: abstract 'u' monogram / extraction funnel -->
-  <g transform="translate(32,40)">
-    <circle cx="0" cy="0" r="22" fill="none" stroke="url(#g)" stroke-width="2.5"/>
-    <path d="M-10,-8 L0,8 L10,-8" fill="none" stroke="url(#g)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-  </g>
+  <!-- === LAYOUT: Icon (left) + Wordmark (right) === -->
 
-  <!-- Text -->
-  <text x="75" y="36" font-family="'Segoe UI', system-ui, sans-serif" font-size="30" font-weight="700" fill="url(#g)">ulpExtractor</text>
-  <text x="77" y="54" font-family="'Segoe UI', system-ui, sans-serif" font-size="11" fill="#8B949E" letter-spacing="2">DOMAIN CREDENTIAL EXTRACTOR</text>
+  <!-- Icon -->
+  <use href="#funnel" x="10" y="30" width="80" height="80"/>
+
+  <!-- Divider -->
+  <line x1="108" y1="48" x2="108" y2="92" stroke="url(#brand)" stroke-width="0.75" opacity="0.2"/>
+
+  <!-- Wordmark -->
+  <text x="124" y="78"
+        font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
+        font-size="36" font-weight="800"
+        fill="url(#brand)"
+        letter-spacing="-0.5">
+    ulpExtractor
+  </text>
+
+  <!-- Tagline -->
+  <text x="126" y="100"
+        font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
+        font-size="10.5" font-weight="400"
+        fill="#8B949E"
+        letter-spacing="3.5">
+    DOMAIN CREDENTIAL EXTRACTOR
+  </text>
+
 </svg>
