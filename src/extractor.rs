@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 use std::fs::{self, File, OpenOptions};
-use std::io::Write;
+use std::io::{BufWriter, Write};
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 use std::sync::Arc;
@@ -27,8 +27,6 @@ pub struct ExtractResult {
     pub total_bytes: u64,
     pub duration_ms: u64,
 }
-
-/// Find all files in `dir` matching any of the given extensions.
 
 /// Find `domain` inside `user_part` at a domain boundary. Returns the end
 /// position of the match so the caller can slice the remainder (user:pass).
@@ -85,6 +83,12 @@ fn trim_ascii(mut bytes: &[u8]) -> &[u8] {
     bytes
 }
 
+fn is_symlink(path: &Path) -> bool {
+    fs::symlink_metadata(path)
+        .map(|m| m.file_type().is_symlink())
+        .unwrap_or(false)
+}
+
 pub fn find_files(dir: &Path, extensions: &[String], recursive: bool) -> std::io::Result<Vec<PathBuf>> {
     let exts: Vec<String> = extensions
         .iter()
@@ -101,6 +105,9 @@ pub fn find_files(dir: &Path, extensions: &[String], recursive: bool) -> std::io
         for entry in fs::read_dir(dir)? {
             let entry = entry?;
             let path = entry.path();
+            if is_symlink(&path) {
+                continue;
+            }
             if path.is_file() {
                 let matches = path.extension()
                     .and_then(|e| e.to_str())
@@ -118,6 +125,9 @@ fn find_files_recursive(dir: &Path, exts: &[String], files: &mut Vec<PathBuf>) -
     for entry in fs::read_dir(dir)? {
         let entry = entry?;
         let path = entry.path();
+        if is_symlink(&path) {
+            continue;
+        }
         if path.is_dir() {
             find_files_recursive(&path, exts, files)?;
         } else if path.is_file() {
@@ -152,8 +162,9 @@ pub fn extract(
     progress: Arc<ExtractProgress>,
     cancelled: Arc<AtomicBool>,
     append: bool,
+    max_matches: Option<usize>,
 ) -> std::io::Result<ExtractResult> {
-    extract_multi(&[input_path.to_path_buf()], domain, divider, threads, output_path, progress, cancelled, append)
+    extract_multi(&[input_path.to_path_buf()], domain, divider, threads, output_path, progress, cancelled, append, max_matches)
 }
 
 /// Extract from multiple files into a single output.
@@ -169,11 +180,16 @@ pub fn extract_multi(
     progress: Arc<ExtractProgress>,
     cancelled: Arc<AtomicBool>,
     append: bool,
+    max_matches: Option<usize>,
 ) -> std::io::Result<ExtractResult> {
     let start = Instant::now();
     let domain = domain.as_bytes();
     let div = divider as u8;
     let threads = threads.max(1);
+
+    if domain.is_empty() {
+        return Ok(ExtractResult { matched_count: 0, total_bytes: 0, duration_ms: 0 });
+    }
 
     // Pre-scan total bytes
     let total = total_bytes(input_paths)?;
@@ -184,11 +200,12 @@ pub fn extract_multi(
             fs::create_dir_all(parent)?;
         }
     }
-    let mut out = if append {
+    let out_file = if append {
         OpenOptions::new().append(true).create(true).open(output_path)?
     } else {
         File::create(output_path)?
     };
+    let mut out = BufWriter::with_capacity(65536, out_file);
     let mut seen: HashSet<Vec<u8>> = HashSet::new();
     let mut total_matched = 0usize;
     let mut bytes_done = 0usize;
@@ -203,8 +220,17 @@ pub fn extract_multi(
         if cancelled.load(Ordering::Relaxed) {
             break;
         }
+        if let Some(max) = max_matches {
+            if total_matched >= max {
+                break;
+            }
+        }
 
         let file = File::open(input_path)?;
+        // Safety: file is opened read-only and mmap is only used for reading.
+        // The file may be modified externally by another process — this is a
+        // documented limitation. In practice, input files for this tool are
+        // static credential dumps.
         let mmap = unsafe { Mmap::map(&file)? };
         let data: &[u8] = &mmap;
 
@@ -300,11 +326,17 @@ pub fn extract_multi(
                 out.write_all(line)?;
                 out.write_all(b"\n")?;
                 total_matched += 1;
+                if let Some(max) = max_matches {
+                    if total_matched >= max {
+                        break;
+                    }
+                }
             }
         }
         progress.matched.store(total_matched, Ordering::Relaxed);
     }
 
+    out.flush()?;
     progress.matched.store(total_matched, Ordering::Relaxed);
     progress.processed.store(total as usize, Ordering::Relaxed);
 
@@ -313,4 +345,84 @@ pub fn extract_multi(
         total_bytes: total,
         duration_ms: start.elapsed().as_millis() as u64,
     })
+}
+
+// ── Tests ───────────────────────────────────────────────────────────────
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_domain_end_exact_match() {
+        assert_eq!(domain_end(b"netflix.com", b"netflix.com"), Some(11));
+    }
+
+    #[test]
+    fn test_domain_end_subdomain() {
+        // www.netflix.com → matches netflix.com
+        let end = domain_end(b"www.netflix.com", b"netflix.com");
+        assert_eq!(end, Some(15));
+    }
+
+    #[test]
+    fn test_domain_end_deep_subdomain() {
+        let end = domain_end(b"platform.deepseek.com", b"deepseek.com");
+        assert_eq!(end, Some(21));
+    }
+
+    #[test]
+    fn test_domain_end_url_with_path() {
+        let end = domain_end(b"https://deepseek.com/login", b"deepseek.com");
+        assert_eq!(end, Some(20));
+    }
+
+    #[test]
+    fn test_domain_end_email() {
+        let end = domain_end(b"user@deepseek.com", b"deepseek.com");
+        assert_eq!(end, Some(17));
+    }
+
+    #[test]
+    fn test_domain_end_rejects_partial() {
+        // mydeepseek.com should NOT match deepseek.com
+        assert_eq!(domain_end(b"mydeepseek.com", b"deepseek.com"), None);
+    }
+
+    #[test]
+    fn test_domain_end_bare_domain_with_colon() {
+        // deepseek.com:user → matches deepseek.com
+        let end = domain_end(b"deepseek.com:user", b"deepseek.com");
+        assert_eq!(end, Some(12));
+    }
+
+    #[test]
+    fn test_domain_end_empty_domain() {
+        assert_eq!(domain_end(b"anything", b""), None);
+    }
+
+    #[test]
+    fn test_domain_end_user_part_too_short() {
+        assert_eq!(domain_end(b"short", b"verylongdomain.com"), None);
+    }
+
+    #[test]
+    fn test_domain_end_no_match() {
+        assert_eq!(domain_end(b"something.else.com", b"netflix.com"), None);
+    }
+
+    #[test]
+    fn test_trim_ascii_basic() {
+        assert_eq!(trim_ascii(b"  hello  "), b"hello");
+    }
+
+    #[test]
+    fn test_trim_ascii_no_whitespace() {
+        assert_eq!(trim_ascii(b"hello"), b"hello");
+    }
+
+    #[test]
+    fn test_trim_ascii_all_whitespace() {
+        assert_eq!(trim_ascii(b"   "), b"");
+    }
 }

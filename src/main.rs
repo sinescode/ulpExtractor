@@ -48,6 +48,12 @@ struct Args {
     /// Append to output file instead of overwriting
     #[arg(short = 'A', long)]
     append: bool,
+    /// Stop after N matches
+    #[arg(short = 'M', long)]
+    max_matches: Option<usize>,
+    /// Suppress progress bar (quiet mode)
+    #[arg(short = 'q', long)]
+    quiet: bool,
 }
 
 // ── Entry Point ──────────────────────────────────────────────────────────
@@ -69,7 +75,8 @@ fn print_header() {
     let top = "┌".to_string() + &"─".repeat(w.saturating_sub(2)) + "┐";
     let bot = "└".to_string() + &"─".repeat(w.saturating_sub(2)) + "┘";
 
-    let title = " ulpExtractor v0.4.2 ";
+    let title = format!(" ulpExtractor v{} ", env!("CARGO_PKG_VERSION"));
+    let title = title.as_str();
     let subtitle = " Domain credential extractor ";
 
     let pad = (w.saturating_sub(title.len())) / 2;
@@ -119,7 +126,14 @@ fn cli_mode(args: Args) -> std::io::Result<()> {
     print_header();
 
     let domain = match &args.domain {
-        Some(d) => d.trim().to_string(),
+        Some(d) => {
+            let d = d.trim().to_string();
+            if d.is_empty() {
+                eprintln!("{}", style("Error: --domain must not be empty").red().bold());
+                std::process::exit(1);
+            }
+            d
+        }
         None => {
             eprintln!("{}", style("Error: --domain is required").red().bold());
             std::process::exit(1);
@@ -148,6 +162,12 @@ fn cli_mode(args: Args) -> std::io::Result<()> {
     print_field("Output", &format!("{} {}", args.output.display().to_string(), if args.append { "(append)" } else { "" }));
     print_field("Threads", &threads.to_string());
     print_field("Divider", &format!("'{}'", args.divider));
+    if let Some(max) = args.max_matches {
+        print_field("Max matches", &max.to_string());
+    }
+    if args.quiet {
+        print_field("Quiet", "yes");
+    }
     print_divider();
 
     // Total size from metadata (instant — no file reading)
@@ -159,7 +179,7 @@ fn cli_mode(args: Args) -> std::io::Result<()> {
     );
     println!();
 
-    run_extraction(&input_files, &domain, args.divider, threads, &args.output, total_bytes, args.append)
+    run_extraction(&input_files, &domain, args.divider, threads, &args.output, total_bytes, args.append, args.max_matches, args.quiet)
 }
 
 // ── Interactive Mode ─────────────────────────────────────────────────────
@@ -271,7 +291,7 @@ fn interactive_mode() -> std::io::Result<()> {
     println!("  {} {}", style("Total size:").cyan(), style(format_bytes(total_bytes)).white().bold());
     println!();
 
-    run_extraction(&input_files, &domain, divider, threads, &output, total_bytes, append)
+    run_extraction(&input_files, &domain, divider, threads, &output, total_bytes, append, None, false)
 }
 
 // ── Shared Extraction Runner ─────────────────────────────────────────────
@@ -284,43 +304,52 @@ fn run_extraction(
     output_path: &PathBuf,
     total_bytes: u64,
     append: bool,
+    max_matches: Option<usize>,
+    quiet: bool,
 ) -> std::io::Result<()> {
     let total = total_bytes as usize;
 
-    let pb = new_progress_bar(total as u64);
     let cancelled = Arc::new(AtomicBool::new(false));
 
     // Ctrl-C handler — set cancelled flag so extraction flushes partial results
     let c_clone = Arc::clone(&cancelled);
-    ctrlc::set_handler(move || {
+    let _ = ctrlc::try_set_handler(move || {
         c_clone.store(true, std::sync::atomic::Ordering::SeqCst);
-    }).expect("Error setting Ctrl-C handler");
+    });
 
     let progress = Arc::new(extractor::ExtractProgress::new(total));
-    let p_clone = Arc::clone(&progress);
-    let pb_clone = pb.clone();
-    let canc_clone = Arc::clone(&cancelled);
 
-    // Background thread: poll progress and update bar
-    std::thread::spawn(move || loop {
-        let processed = p_clone.processed.load(std::sync::atomic::Ordering::Relaxed);
-        let matched = p_clone.matched.load(std::sync::atomic::Ordering::Relaxed);
-        let tot = p_clone.total.load(std::sync::atomic::Ordering::Relaxed);
+    let (pb, tx) = if !quiet {
+        let pb = new_progress_bar(total as u64);
+        let cb = pb.clone();
+        let p_clone = Arc::clone(&progress);
+        let canc_clone = Arc::clone(&cancelled);
+        let (tx, rx) = std::sync::mpsc::channel::<()>();
 
-        pb_clone.set_position(processed as u64);
-        pb_clone.set_message(format!("Matches: {}", format_number(matched as u64)));
+        std::thread::spawn(move || loop {
+            let processed = p_clone.processed.load(std::sync::atomic::Ordering::Relaxed);
+            let matched = p_clone.matched.load(std::sync::atomic::Ordering::Relaxed);
+            let tot = p_clone.total.load(std::sync::atomic::Ordering::Relaxed);
 
-        let stopped = canc_clone.load(std::sync::atomic::Ordering::Relaxed);
-        if processed >= tot && tot > 0 || stopped {
-            if stopped {
-                pb_clone.finish_with_message(format!("Cancelled — {} matches flushed", format_number(matched as u64)));
-            } else {
-                pb_clone.finish_with_message(format!("Done — {} matches", format_number(matched as u64)));
+            cb.set_position(processed as u64);
+            cb.set_message(format!("Matches: {}", format_number(matched as u64)));
+
+            let stopped = canc_clone.load(std::sync::atomic::Ordering::Relaxed);
+            if processed >= tot && tot > 0 || stopped {
+                if stopped {
+                    cb.finish_with_message(format!("Cancelled — {} matches flushed", format_number(matched as u64)));
+                } else {
+                    cb.finish_with_message(format!("Done — {} matches", format_number(matched as u64)));
+                }
+                break;
             }
-            break;
-        }
-        std::thread::sleep(std::time::Duration::from_millis(100));
-    });
+            let _ = rx.recv_timeout(std::time::Duration::from_millis(100));
+        });
+
+        (Some(pb), Some(tx))
+    } else {
+        (None, None)
+    };
 
     let result = if input_files.len() == 1 {
         extractor::extract(
@@ -332,6 +361,7 @@ fn run_extraction(
             progress,
             cancelled.clone(),
             append,
+            max_matches,
         )?
     } else {
         extractor::extract_multi(
@@ -343,10 +373,16 @@ fn run_extraction(
             progress,
             cancelled.clone(),
             append,
+            max_matches,
         )?
     };
 
-    pb.finish_and_clear();
+    if let Some(tx) = tx {
+        let _ = tx.send(()); // wake progress thread immediately
+    }
+    if let Some(pb) = &pb {
+        pb.finish_and_clear();
+    }
 
     // Summary
     let was_cancelled = cancelled.load(std::sync::atomic::Ordering::Relaxed);
