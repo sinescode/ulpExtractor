@@ -102,3 +102,7 @@ cargo build --release
 ```
 
 Binary lands at `target/release/ulpExtractor`.
+
+## Contributing
+
+Pull requests, issues, and stars are welcome. Feel free to open an issue for bugs, feature requests, or questions.
