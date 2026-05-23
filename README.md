@@ -113,6 +113,3 @@ cargo build --release
 # → target/release/ulpExtractor
 ```
 
-## License
-
-MIT © [Sinescode](https://github.com/sinescode)
