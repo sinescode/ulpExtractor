@@ -1,125 +1,60 @@
-<?xml version='1.0' encoding='utf-8'?>
-<svg xmlns="http://www.w3.org/2000/svg" width="540" height="140" viewBox="0 0 540 140" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="logo-title logo-desc">
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 140" width="540" height="140" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="logo-title logo-desc">
   <title id="logo-title">ulpExtractor</title>
-  <desc id="logo-desc">ulpExtractor — high-performance Rust CLI for boundary-aware domain credential extraction. Horizontal logo with extraction gate icon and wordmark featuring an integrated three-beam E motif.</desc>
+  <desc id="logo-desc">ulpExtractor — high-performance Rust CLI for boundary-aware credential extraction. Horizontal logo with extraction gate icon and wordmark.</desc>
 
   <defs>
-    <!-- Replicate icon gradients at logo scale -->
-    <radialGradient id="bg" cx="0.5" cy="0.32" r="0.68" fx="0.45" fy="0.25">
-      <stop offset="0%" stop-color="#1A3450" />
-      <stop offset="38%" stop-color="#122438" />
-      <stop offset="100%" stop-color="#060A10" />
-    </radialGradient>
-    <radialGradient id="inner-glow" cx="0.5" cy="0.48" r="0.55">
-      <stop offset="0%" stop-color="#00D4FF" stop-opacity="0.08" />
-      <stop offset="55%" stop-color="#00D4FF" stop-opacity="0.025" />
-      <stop offset="100%" stop-color="#00D4FF" stop-opacity="0" />
-    </radialGradient>
-    <linearGradient id="bracket" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#00D4FF" />
-      <stop offset="85%" stop-color="#00BCD8" />
-      <stop offset="100%" stop-color="#0098B0" />
+    <linearGradient id="cyan-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00D4FF"/>
+      <stop offset="100%" stop-color="#00A8CC"/>
     </linearGradient>
-    <linearGradient id="beam" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#00D4FF" stop-opacity="0.95" />
-      <stop offset="72%" stop-color="#00D4FF" stop-opacity="0.9" />
-      <stop offset="92%" stop-color="#00C0E0" stop-opacity="0.55" />
-      <stop offset="100%" stop-color="#00B0C8" stop-opacity="0.15" />
+    <linearGradient id="beam-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00D4FF"/>
+      <stop offset="70%" stop-color="#00BCD8"/>
+      <stop offset="100%" stop-color="#0098B0" stop-opacity="0.35"/>
     </linearGradient>
-    <filter id="dot-glow" x="-100%" y="-100%" width="300%" height="300%">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur" />
-      <feMerge>
-        <feMergeNode in="blur" />
-        <feMergeNode in="blur" />
-        <feMergeNode in="SourceGraphic" />
-      </feMerge>
-    </filter>
-    <filter id="bracket-glow" x="-25%" y="-25%" width="150%" height="150%">
-      <feDropShadow dx="0" dy="1.5" stdDeviation="3.5" flood-color="#00D4FF" flood-opacity="0.15" />
-    </filter>
-    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.06" />
-      <stop offset="30%" stop-color="#FFFFFF" stop-opacity="0.012" />
-      <stop offset="70%" stop-color="#000000" stop-opacity="0" />
-      <stop offset="100%" stop-color="#000000" stop-opacity="0.05" />
-    </linearGradient>
-
-    <!-- E motif gradient — matches bracket treatment for visual cohesion -->
     <linearGradient id="e-grad" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#00D4FF" />
-      <stop offset="90%" stop-color="#00BCD8" />
-      <stop offset="100%" stop-color="#0098B0" />
+      <stop offset="0%" stop-color="#00D4FF"/>
+      <stop offset="100%" stop-color="#0098B0"/>
     </linearGradient>
-
-    <!-- Typography safe font stack -->
-    <style>
-      <![CDATA[
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800&display=swap');
-        .wordmark-light { font-family: 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-weight: 300; }
-        .wordmark-bold { font-family: 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-weight: 700; }
-        .wordmark-tag  { font-family: 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-weight: 600; }
-      ]]>
-    </style>
   </defs>
 
-  <g id="logo">
-    <!-- ===== ICON MARK (Left) ===== -->
-    <g transform="translate(18, 26) scale(0.35)">
-      <!-- Badge background -->
-      <rect fill="url(#bg)" x="16" y="16" width="224" height="224" rx="52" ry="52" />
-      <rect fill="none" stroke="#00D4FF" stroke-width="0.6" stroke-opacity="0.06" x="16.5" y="16.5" width="223" height="223" rx="51.5" ry="51.5" />
-      <circle fill="url(#inner-glow)" cx="128" cy="128" r="84" />
+  <!-- Icon mark (scaled down) -->
+  <g transform="translate(16, 28) scale(0.36)">
+    <rect x="16" y="16" width="224" height="224" rx="48" ry="48" fill="#0A1628"/>
+    <rect x="16.5" y="16.5" width="223" height="223" rx="47.5" ry="47.5" fill="none" stroke="#00D4FF" stroke-width="0.6" stroke-opacity="0.15"/>
 
-      <!-- U-Bracket -->
-      <g filter="url(#bracket-glow)">
-        <path d="M 184 72 L 72 72 L 72 184 L 184 184"
-              fill="none" stroke="url(#bracket)" stroke-width="5.5"
-              stroke-linecap="round" stroke-linejoin="round" />
-      </g>
+    <path d="M 180 64 L 64 64 L 64 192 L 180 192" fill="none" stroke="url(#cyan-grad)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
 
-      <!-- Extraction Beams -->
-      <rect x="82" y="97" width="84" height="10" rx="5" ry="5" fill="url(#beam)" />
-      <rect x="82" y="123" width="106" height="10" rx="5" ry="5" fill="url(#beam)" />
-      <rect x="82" y="149" width="92" height="10" rx="5" ry="5" fill="url(#beam)" />
+    <rect x="74" y="90" width="88" height="11" rx="5.5" ry="5.5" fill="url(#beam-grad)"/>
+    <rect x="74" y="118" width="108" height="11" rx="5.5" ry="5.5" fill="url(#beam-grad)"/>
+    <rect x="74" y="146" width="94" height="11" rx="5.5" ry="5.5" fill="url(#beam-grad)"/>
 
-      <!-- Colon Dots -->
-      <circle cx="196" cy="115" r="4.5" fill="#FFB347" filter="url(#dot-glow)" />
-      <circle cx="196" cy="141" r="4.5" fill="#FFB347" filter="url(#dot-glow)" />
-
-      <!-- Glass highlight -->
-      <rect fill="url(#glass)" x="16" y="16" width="224" height="224" rx="52" ry="52" />
-    </g>
-
-    <!-- ===== VERTICAL DIVIDER ===== -->
-    <line x1="125" y1="36" x2="125" y2="104" stroke="#00D4FF" stroke-width="0.8" stroke-opacity="0.15" stroke-linecap="round" />
-
-    <!-- ===== WORDMARK (Right) ===== -->
-
-    <!-- "ulp" — lightweight lowercase, muted cyan -->
-    <text x="140" y="82" class="wordmark-light" font-size="20" fill="#0098B0" letter-spacing="1.5">ulp</text>
-
-    <!-- Custom "E" — constructed from the three-beam extraction motif with colon dots
-         This directly mirrors the icon's visual language, creating a unified brand mark.
-         The E's three arms represent the three extracted fields (identifier, user, password),
-         and the amber dots in the gaps represent the colon separators. -->
-    <g>
-      <!-- Left backbone of the E -->
-      <rect x="195" y="50" width="6" height="34" rx="2" ry="2" fill="url(#e-grad)" />
-      <!-- Top arm — shortest (identifier) -->
-      <rect x="195" y="52" width="24" height="6" rx="3" ry="3" fill="url(#e-grad)" />
-      <!-- Middle arm — longest (user) -->
-      <rect x="195" y="66" width="34" height="6" rx="3" ry="3" fill="url(#e-grad)" />
-      <!-- Bottom arm — medium (password) -->
-      <rect x="195" y="78" width="28" height="6" rx="3" ry="3" fill="url(#e-grad)" />
-      <!-- Colon dots between the arms -->
-      <circle cx="233" cy="62" r="3" fill="#FFB347" />
-      <circle cx="233" cy="75" r="3" fill="#FFB347" />
-    </g>
-
-    <!-- "xtractor" — bold navy, the weight anchors the wordmark -->
-    <text x="252" y="82" class="wordmark-bold" font-size="24" fill="#142438" letter-spacing="-0.3">xtractor</text>
-
-    <!-- ===== TAGLINE ===== -->
-    <text x="140" y="112" class="wordmark-tag" font-size="9" fill="#6B7B8D" letter-spacing="3.5">BOUNDARY-AWARE CREDENTIAL EXTRACTION</text>
+    <circle cx="192" cy="108" r="5" fill="#FFB347"/>
+    <circle cx="192" cy="136" r="5" fill="#FFB347"/>
   </g>
+
+  <!-- Divider -->
+  <line x1="124" y1="38" x2="124" y2="102" stroke="#00D4FF" stroke-width="0.7" stroke-opacity="0.18" stroke-linecap="round"/>
+
+  <!-- Wordmark -->
+  <!-- "ulp" — lightweight, muted -->
+  <text x="140" y="82" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-weight="300" font-size="22" fill="#0098B0" letter-spacing="2">ulp</text>
+
+  <!-- Custom "E" built from extraction beam motif -->
+  <g transform="translate(194, 50)">
+    <rect x="0" y="0" width="7" height="34" rx="3" ry="3" fill="url(#e-grad)"/>
+    <rect x="0" y="2" width="26" height="7" rx="3.5" ry="3.5" fill="url(#e-grad)"/>
+    <rect x="0" y="15" width="36" height="7" rx="3.5" ry="3.5" fill="url(#e-grad)"/>
+    <rect x="0" y="27" width="30" height="7" rx="3.5" ry="3.5" fill="url(#e-grad)"/>
+    <!-- Amber dots between E arms -->
+    <circle cx="44" cy="12" r="3" fill="#FFB347"/>
+    <circle cx="44" cy="25" r="3" fill="#FFB347"/>
+  </g>
+
+  <!-- "xtractor" — bold, dark -->
+  <text x="254" y="82" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-weight="700" font-size="26" fill="#0A1628" letter-spacing="-0.3">xtractor</text>
+
+  <!-- Tagline -->
+  <text x="140" y="114" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-weight="600" font-size="9" fill="#6B7B8D" letter-spacing="3.5">BOUNDARY-AWARE CREDENTIAL EXTRACTION</text>
 </svg>
