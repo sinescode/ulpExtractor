@@ -1,35 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="icon-title icon-desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="icon-title">
   <title id="icon-title">ulpExtractor</title>
-  <desc id="icon-desc">Extraction gate icon — U-shaped bracket with three scanning beams and two colon separator dots</desc>
 
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#142438"/>
       <stop offset="100%" stop-color="#0A1628"/>
     </linearGradient>
-    <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#00D4FF"/>
-      <stop offset="100%" stop-color="#00A8CC"/>
-    </linearGradient>
     <linearGradient id="beam" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#00D4FF"/>
-      <stop offset="100%" stop-color="#0098B0" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#00D4FF" stop-opacity="0.3"/>
     </linearGradient>
   </defs>
 
-  <!-- Squircle background (app icon) -->
-  <rect x="16" y="16" width="224" height="224" rx="48" ry="48" fill="url(#bg)"/>
+  <rect x="16" y="16" width="224" height="224" rx="48" fill="url(#bg)"/>
 
-  <!-- U-Bracket: boundary gate, open right -->
-  <path d="M 184 64 L 64 64 L 64 192 L 184 192" fill="none" stroke="url(#cyan)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 184 64 L 64 64 L 64 192 L 184 192" fill="none" stroke="#00D4FF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
 
-  <!-- Three extraction beams -->
-  <rect x="74" y="90" width="88" height="11" rx="5.5" ry="5.5" fill="url(#beam)"/>
-  <rect x="74" y="118" width="108" height="11" rx="5.5" ry="5.5" fill="url(#beam)"/>
-  <rect x="74" y="146" width="94" height="11" rx="5.5" ry="5.5" fill="url(#beam)"/>
+  <rect x="74" y="90" width="88" height="11" rx="5.5" fill="url(#beam)"/>
+  <rect x="74" y="118" width="108" height="11" rx="5.5" fill="url(#beam)"/>
+  <rect x="74" y="146" width="94" height="11" rx="5.5" fill="url(#beam)"/>
 
-  <!-- Colon separator dots -->
   <circle cx="194" cy="108" r="5" fill="#FFB347"/>
   <circle cx="194" cy="136" r="5" fill="#FFB347"/>
 </svg>
