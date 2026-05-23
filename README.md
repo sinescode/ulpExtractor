@@ -1,5 +1,9 @@
 # ulpExtractor
 
+<div align="center">
+  <img src="assets/logo.svg" alt="ulpExtractor" width="600">
+</div>
+
 **Fast domain credential extractor** — parse large `url:user:pass` lists and extract matching credentials by domain.
 
 Built in Rust with a styled CLI, interactive prompt mode, and multi-file batch scanning.
@@ -16,6 +20,8 @@ Built in Rust with a styled CLI, interactive prompt mode, and multi-file batch s
 - **Append mode** (`-A`) — append to output file instead of overwriting
 - **Deduplication** — duplicate `user:pass` pairs are written only once
 - **Graceful cancel** — Ctrl-C flushes partial results to output before exiting
+- **Limit matches** (`-M`) — stop after N matches to prevent memory exhaustion on massive datasets
+- **Quiet mode** (`-q`) — suppress progress bar for scripting and pipes
 - **Cross-platform** — Linux, macOS, Windows pre-built binaries on every release
 
 ## Quick Start
@@ -61,6 +67,12 @@ ulpExtractor -d netflix.com -a --dir ./data -o results.txt -t 8
 
 # Append to existing output
 ulpExtractor -d netflix.com -i combo2.txt -A
+
+# Limit to first 100 matches
+ulpExtractor -d netflix.com -i huge_dump.txt -M 100
+
+# Quiet mode (no progress bar) — pipe friendly
+ulpExtractor -d netflix.com -i combo.txt -o out.txt -q
 ```
 
 ### Options
@@ -77,6 +89,8 @@ ulpExtractor -d netflix.com -i combo2.txt -A
 | `-A, --append` | Append to output instead of overwriting | off |
 | `-t, --threads` | Number of threads (capped at 64) | `4` |
 | `-D, --divider` | Field separator character | `:` |
+| `-M, --max-matches` | Stop after N matches | unlimited |
+| `-q, --quiet` | Suppress progress bar | off |
 
 ## Input Format
 
@@ -102,6 +116,27 @@ cargo build --release
 ```
 
 Binary lands at `target/release/ulpExtractor`.
+
+## Changelog
+
+### v0.4.3
+- `--max-matches` / `-M N` flag — stop after N matches
+- `--quiet` / `-q` flag — suppress progress bar for scripts
+- 64KB `BufWriter` batching — faster output I/O
+- Symlink cycle detection in recursive scan
+- Channel-based progress wake (was 100ms sleep)
+- Unsafe mmap documented with safety rationale
+- 13 unit tests for domain matching logic
+- Version auto-synced from `Cargo.toml`
+
+### v0.4.0
+- Smart domain matching with subdomain, URL, and email support
+- Styled CLI with boxed header and colored fields
+- Interactive prompt mode
+- Multi-file batch scanning with recursive support
+- Multi-threaded extraction with configurable parallelism
+- Custom divider support, append mode, deduplication
+- Graceful Ctrl-C with partial result flushing
 
 ## Contributing
 
