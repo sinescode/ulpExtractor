@@ -2,45 +2,43 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 120" width="480" height="120" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="logo-title">
   <title id="logo-title">ulpExtractor</title>
 
-  <!-- Icon mark (standalone, transparent bg) -->
-  <g transform="translate(20, 28) scale(0.68)">
-    <path d="M 104 0 L 0 0 L 0 104 L 104 104" fill="none" stroke="#00D4FF" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <rect x="8" y="24" width="72" height="9" rx="4.5" fill="#00D4FF"/>
-    <rect x="8" y="47" width="88" height="9" rx="4.5" fill="#00D4FF"/>
-    <rect x="8" y="70" width="76" height="9" rx="4.5" fill="#00D4FF"/>
-    <circle cx="98" cy="32" r="4" fill="#FFB347"/>
-    <circle cx="98" cy="55" r="4" fill="#FFB347"/>
+  <!-- Icon mark — abstract "E" (standalone, no background) -->
+  <g transform="translate(16, 28) scale(0.72)" fill="#00D4FF">
+    <rect x="52" y="66" width="8" rx="4" height="84"/>
+    <rect x="52" y="66" width="104" height="12" rx="6"/>
+    <rect x="52" y="102" width="132" height="12" rx="6"/>
+    <rect x="52" y="138" width="118" height="12" rx="6"/>
+    <circle cx="190" cy="108" r="5.5" fill="#FFB347"/>
   </g>
 
   <!-- Divider -->
   <line x1="112" y1="34" x2="112" y2="98" stroke="#00D4FF" stroke-width="0.8" opacity="0.15"/>
 
-  <!-- Wordmark: "ulp" (monoline, muted cyan) -->
+  <!-- "ulp" — monoline, muted cyan -->
   <g fill="none" stroke="#0098B0" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M 128,73 L 128,53 C 128,47 132,45 136,45 C 140,45 144,47 144,53 L 144,73"/>
     <path d="M 152,45 L 152,73"/>
     <path d="M 164,51 L 164,81 M 164,51 L 180,51 C 186,51 190,55 190,61 C 190,67 186,71 180,71 L 164,71"/>
   </g>
 
-  <!-- Custom "E" (beam motif) -->
-  <g>
-    <rect x="202" y="45" width="5" height="28" rx="2.5" fill="#00D4FF"/>
-    <rect x="202" y="47" width="22" height="5" rx="2.5" fill="#00D4FF"/>
-    <rect x="202" y="57" width="30" height="5" rx="2.5" fill="#00D4FF"/>
-    <rect x="202" y="67" width="26" height="5" rx="2.5" fill="#00D4FF"/>
-    <circle cx="238" cy="53" r="2.5" fill="#FFB347"/>
-    <circle cx="238" cy="64" r="2.5" fill="#FFB347"/>
+  <!-- Icon reused as "E" in wordmark — scaled to match cap-height -->
+  <g transform="translate(202, 23) scale(0.333)" fill="#00D4FF">
+    <rect x="52" y="66" width="8" rx="4" height="84"/>
+    <rect x="52" y="66" width="104" height="12" rx="6"/>
+    <rect x="52" y="102" width="132" height="12" rx="6"/>
+    <rect x="52" y="138" width="118" height="12" rx="6"/>
+    <circle cx="190" cy="108" r="5.5" fill="#FFB347"/>
   </g>
 
-  <!-- Wordmark: "xtractor" (monoline, dark navy) -->
+  <!-- "xtractor" — monoline, dark navy -->
   <g fill="none" stroke="#0A1628" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M 252,45 L 274,73 M 274,45 L 252,73"/>
-    <path d="M 282,51 L 282,75 M 275,58 L 289,58"/>
-    <path d="M 297,73 L 297,51 C 297,47 301,45 305,45 C 310,45 314,48 314,51"/>
-    <path d="M 322,73 L 322,51 C 322,47 330,47 334,49 L 342,73 M 334,58 L 334,73 M 326,61 L 334,61"/>
-    <path d="M 352,73 C 348,73 344,71 344,59 C 344,47 348,45 352,45"/>
-    <path d="M 360,51 L 360,75 M 353,58 L 367,58"/>
-    <path d="M 375,59 C 375,47 395,47 395,59 C 395,71 375,73 375,59 Z"/>
-    <path d="M 403,73 L 403,51 C 403,47 407,45 411,45 C 416,45 420,48 420,51"/>
+    <path d="M 274,45 L 296,73 M 296,45 L 274,73"/>
+    <path d="M 304,51 L 304,75 M 297,58 L 311,58"/>
+    <path d="M 319,73 L 319,51 C 319,47 323,45 327,45 C 332,45 336,48 336,51"/>
+    <path d="M 344,73 L 344,51 C 344,47 352,47 356,49 L 364,73 M 356,58 L 356,73 M 348,61 L 356,61"/>
+    <path d="M 374,73 C 370,73 366,71 366,59 C 366,47 370,45 374,45"/>
+    <path d="M 382,51 L 382,75 M 375,58 L 389,58"/>
+    <path d="M 397,59 C 397,47 417,47 417,59 C 417,71 397,73 397,59 Z"/>
+    <path d="M 425,73 L 425,51 C 425,47 429,45 433,45 C 438,45 442,48 442,51"/>
   </g>
 </svg>

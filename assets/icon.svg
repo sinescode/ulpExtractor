@@ -7,20 +7,22 @@
       <stop offset="0%" stop-color="#142438"/>
       <stop offset="100%" stop-color="#0A1628"/>
     </linearGradient>
-    <linearGradient id="beam" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#00D4FF"/>
-      <stop offset="100%" stop-color="#00D4FF" stop-opacity="0.3"/>
-    </linearGradient>
   </defs>
 
   <rect x="16" y="16" width="224" height="224" rx="48" fill="url(#bg)"/>
 
-  <path d="M 184 64 L 64 64 L 64 192 L 184 192" fill="none" stroke="#00D4FF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Abstract "E" — three extraction bars + vertical stem -->
+  <g fill="#00D4FF">
+    <!-- Vertical stem -->
+    <rect x="52" y="66" width="8" rx="4" height="84"/>
+    <!-- Top bar (identifier — shortest) -->
+    <rect x="52" y="66" width="104" height="12" rx="6"/>
+    <!-- Middle bar (user — longest, primary target) -->
+    <rect x="52" y="102" width="132" height="12" rx="6"/>
+    <!-- Bottom bar (password — medium) -->
+    <rect x="52" y="138" width="118" height="12" rx="6"/>
+  </g>
 
-  <rect x="74" y="90" width="88" height="11" rx="5.5" fill="url(#beam)"/>
-  <rect x="74" y="118" width="108" height="11" rx="5.5" fill="url(#beam)"/>
-  <rect x="74" y="146" width="94" height="11" rx="5.5" fill="url(#beam)"/>
-
-  <circle cx="194" cy="108" r="5" fill="#FFB347"/>
-  <circle cx="194" cy="136" r="5" fill="#FFB347"/>
+  <!-- Extraction point — amber colon separator -->
+  <circle cx="190" cy="108" r="5.5" fill="#FFB347"/>
 </svg>
