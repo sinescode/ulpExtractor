@@ -1,67 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 180" width="640" height="180">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 80" width="400" height="80">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0D1117"/>
-      <stop offset="100%" stop-color="#161B22"/>
-    </linearGradient>
-    <linearGradient id="primary" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#4ECDC4"/>
-      <stop offset="100%" stop-color="#2D8A82"/>
+      <stop offset="100%" stop-color="#6EE7DE"/>
     </linearGradient>
-    <linearGradient id="accent" x1="100%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#FF6B6B"/>
-      <stop offset="100%" stop-color="#4ECDC4"/>
-    </linearGradient>
-    <linearGradient id="fade" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#4ECDC4" stop-opacity="0.0"/>
-      <stop offset="50%" stop-color="#4ECDC4" stop-opacity="0.3"/>
-      <stop offset="100%" stop-color="#4ECDC4" stop-opacity="0.0"/>
-    </linearGradient>
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="2" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
   </defs>
 
-  <!-- Background card -->
-  <rect x="0" y="0" width="640" height="180" rx="16" fill="url(#bg)"/>
-
-  <!-- Icon mark: stylized extractor funnel -->
-  <g transform="translate(75,90)" filter="url(#glow)">
-    <!-- Outer ring -->
-    <circle cx="0" cy="0" r="38" fill="none" stroke="url(#accent)" stroke-width="2.5" opacity="0.3"/>
-    <circle cx="0" cy="0" r="38" fill="none" stroke="url(#accent)" stroke-width="2.5" stroke-dasharray="60 180" stroke-dashoffset="420" opacity="0.8">
-      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="8s" repeatCount="indefinite"/>
-    </circle>
-
-    <!-- Inner hexagon — represents extraction/filtering -->
-    <polygon points="0,-24 21,-12 21,12 0,24 -21,12 -21,-12" fill="none" stroke="url(#primary)" stroke-width="3" stroke-linejoin="round"/>
-
-    <!-- Arrow down inside hexagon -->
-    <path d="M0,-10 L0,10 M-7,3 L0,10 L7,3" fill="none" stroke="url(#primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-
-    <!-- Entry dots -->
-    <circle cx="-14" cy="-14" r="3" fill="#4ECDC4" opacity="0.6"/>
-    <circle cx="0" cy="-14" r="3" fill="#4ECDC4" opacity="0.4"/>
-    <circle cx="14" cy="-14" r="3" fill="#4ECDC4" opacity="0.6"/>
-
-    <!-- Output dot -->
-    <circle cx="0" cy="18" r="4" fill="#FF6B6B" opacity="0.9"/>
+  <!-- Icon: abstract 'u' monogram / extraction funnel -->
+  <g transform="translate(32,40)">
+    <circle cx="0" cy="0" r="22" fill="none" stroke="url(#g)" stroke-width="2.5"/>
+    <path d="M-10,-8 L0,8 L10,-8" fill="none" stroke="url(#g)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 
-  <!-- Divider line -->
-  <line x1="145" y1="55" x2="145" y2="125" stroke="url(#fade)" stroke-width="1"/>
-
-  <!-- Typography -->
-  <text x="170" y="78" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="44" font-weight="800" fill="url(#primary)" letter-spacing="-1">ulpExtractor</text>
-
-  <!-- Subtitle -->
-  <text x="172" y="108" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="500" fill="#8B949E" letter-spacing="4" text-transform="uppercase">DOMAIN CREDENTIAL EXTRACTOR</text>
-
-  <!-- Bottom accent bar -->
-  <rect x="170" y="122" width="120" height="2" rx="1" fill="url(#primary)" opacity="0.5"/>
-
-  <!-- Version badge -->
-  <rect x="570" y="78" width="48" height="22" rx="11" fill="#4ECDC4" opacity="0.12"/>
-  <text x="594" y="93" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600" fill="#4ECDC4" text-anchor="middle">v0.4.3</text>
+  <!-- Text -->
+  <text x="75" y="36" font-family="'Segoe UI', system-ui, sans-serif" font-size="30" font-weight="700" fill="url(#g)">ulpExtractor</text>
+  <text x="77" y="54" font-family="'Segoe UI', system-ui, sans-serif" font-size="11" fill="#8B949E" letter-spacing="2">DOMAIN CREDENTIAL EXTRACTOR</text>
 </svg>
