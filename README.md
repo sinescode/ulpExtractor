@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/logo.svg" alt="ulpExtractor" width="400">
+  <img src="assets/icon.svg" alt="ulpExtractor" width="120">
 
   <br>
 
