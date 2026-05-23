@@ -1,0 +1,198 @@
+{
+  "canvas": {
+    "width": 540,
+    "height": 140,
+    "viewBox": "0 0 540 140",
+    "units": "px"
+  },
+  "metadata": {
+    "title": "ulpExtractor",
+    "desc": "Domain credential extractor — high-performance Rust CLI tool for parsing and extracting credentials with boundary-aware matching"
+  },
+  "defs": {
+    "gradients": [
+      {
+        "type": "radial", "id": "icon-bg",
+        "cx": 0.5, "cy": 0.3, "fx": 0.45, "fy": 0.25, "r": 0.65,
+        "stops": [
+          {"offset": "0%", "color": "#162840"},
+          {"offset": "45%", "color": "#101C2A"},
+          {"offset": "100%", "color": "#080C14"}
+        ]
+      },
+      {
+        "type": "radial", "id": "inner-glow",
+        "cx": 0.5, "cy": 0.45, "r": 0.55,
+        "stops": [
+          {"offset": "0%", "color": "#00D4FF", "opacity": 0.1},
+          {"offset": "60%", "color": "#00D4FF", "opacity": 0.03},
+          {"offset": "100%", "color": "#00D4FF", "opacity": 0}
+        ]
+      },
+      {
+        "type": "linear", "id": "s1l",
+        "x1": 1, "y1": 0, "x2": 0, "y2": 1,
+        "stops": [
+          {"offset": "0%", "color": "#00A8D0"},
+          {"offset": "100%", "color": "#007898"}
+        ]
+      },
+      {
+        "type": "linear", "id": "s1r",
+        "x1": 0, "y1": 0, "x2": 1, "y2": 1,
+        "stops": [
+          {"offset": "0%", "color": "#00D4FF"},
+          {"offset": "100%", "color": "#00A0C8"}
+        ]
+      },
+      {
+        "type": "linear", "id": "s2l",
+        "x1": 1, "y1": 0, "x2": 0, "y2": 1,
+        "stops": [
+          {"offset": "0%", "color": "#008CB0"},
+          {"offset": "100%", "color": "#006080"}
+        ]
+      },
+      {
+        "type": "linear", "id": "s2r",
+        "x1": 0, "y1": 0, "x2": 1, "y2": 1,
+        "stops": [
+          {"offset": "0%", "color": "#00B8E0"},
+          {"offset": "100%", "color": "#0088A8"}
+        ]
+      },
+      {
+        "type": "linear", "id": "s3l",
+        "x1": 1, "y1": 0, "x2": 0, "y2": 1,
+        "stops": [
+          {"offset": "0%", "color": "#006E90"},
+          {"offset": "100%", "color": "#004868"}
+        ]
+      },
+      {
+        "type": "linear", "id": "s3r",
+        "x1": 0, "y1": 0, "x2": 1, "y2": 1,
+        "stops": [
+          {"offset": "0%", "color": "#0098C0"},
+          {"offset": "100%", "color": "#006888"}
+        ]
+      },
+      {
+        "type": "radial", "id": "spark-outer",
+        "cx": 0.5, "cy": 0.5, "r": 0.5,
+        "stops": [
+          {"offset": "0%", "color": "#FFB347", "opacity": 0.7},
+          {"offset": "35%", "color": "#FF8C42", "opacity": 0.3},
+          {"offset": "70%", "color": "#FF6B6B", "opacity": 0.06},
+          {"offset": "100%", "color": "#FF6B6B", "opacity": 0}
+        ]
+      },
+      {
+        "type": "radial", "id": "spark-mid",
+        "cx": 0.5, "cy": 0.5, "r": 0.5,
+        "stops": [
+          {"offset": "0%", "color": "#FFB347", "opacity": 0.9},
+          {"offset": "50%", "color": "#FF8C42", "opacity": 0.4},
+          {"offset": "100%", "color": "#E8403A", "opacity": 0}
+        ]
+      },
+      {
+        "type": "radial", "id": "spark-core",
+        "cx": 0.4, "cy": 0.35, "r": 0.5,
+        "stops": [
+          {"offset": "0%", "color": "#FFD700"},
+          {"offset": "45%", "color": "#FFA533"},
+          {"offset": "100%", "color": "#FF5C3A"}
+        ]
+      },
+      {
+        "type": "linear", "id": "glass",
+        "x1": 0, "y1": 0, "x2": 0, "y2": 1,
+        "stops": [
+          {"offset": "0%", "color": "#fff", "opacity": 0.09},
+          {"offset": "35%", "color": "#fff", "opacity": 0.01},
+          {"offset": "65%", "color": "#fff", "opacity": 0},
+          {"offset": "100%", "color": "#000", "opacity": 0.08}
+        ]
+      },
+      {
+        "type": "linear", "id": "brand-h",
+        "x1": 0, "y1": 0, "x2": 1, "y2": 0,
+        "stops": [
+          {"offset": "0%", "color": "#00D4FF"},
+          {"offset": "100%", "color": "#0098B0"}
+        ]
+      }
+    ]
+  },
+  "elements": [
+    {
+      "type": "group", "id": "icon-mark",
+      "children": [
+        {"type": "rect", "x": 15, "y": 26, "width": 92, "height": 92, "rx": 22, "ry": 22, "style": {"fill": "#000", "opacity": 0.2}},
+        {"type": "rect", "x": 14, "y": 24, "width": 92, "height": 92, "rx": 22, "ry": 22, "style": {"fill": "url(#icon-bg)"}},
+        {"type": "rect", "x": 14.5, "y": 24.5, "width": 91, "height": 91, "rx": 21.5, "ry": 21.5, "style": {"fill": "none", "stroke": "#fff", "strokeWidth": 0.5, "opacity": 0.06}},
+        {"type": "circle", "cx": 60, "cy": 72, "r": 36, "style": {"fill": "url(#inner-glow)"}},
+
+        {"type": "group", "id": "data-bars", "style": {"opacity": 0.8}, "children": [
+          {"type": "rect", "x": 32, "y": 28, "width": 56, "height": 1.8, "rx": 0.9, "ry": 0.9, "style": {"fill": "#00D4FF", "opacity": 0.3}},
+          {"type": "rect", "x": 27, "y": 31, "width": 66, "height": 1.8, "rx": 0.9, "ry": 0.9, "style": {"fill": "#00D4FF", "opacity": 0.2}},
+          {"type": "rect", "x": 35, "y": 34, "width": 50, "height": 1.8, "rx": 0.9, "ry": 0.9, "style": {"fill": "#00D4FF", "opacity": 0.25}}
+        ]},
+
+        {"type": "group", "id": "crystal", "children": [
+          {"type": "polygon", "points": [[27,36],[60,36],[60,60],[37,60]], "style": {"fill": "url(#s1l)", "stroke": "#00D4FF", "strokeWidth": 0.3, "strokeOpacity": 0.18}},
+          {"type": "polygon", "points": [[60,36],[93,36],[83,60],[60,60]], "style": {"fill": "url(#s1r)", "stroke": "#00D4FF", "strokeWidth": 0.3, "strokeOpacity": 0.18}},
+          {"type": "polygon", "points": [[37,60],[60,60],[60,84],[43,84]], "style": {"fill": "url(#s2l)", "stroke": "#00D4FF", "strokeWidth": 0.3, "strokeOpacity": 0.18}},
+          {"type": "polygon", "points": [[60,60],[83,60],[77,84],[60,84]], "style": {"fill": "url(#s2r)", "stroke": "#00D4FF", "strokeWidth": 0.3, "strokeOpacity": 0.18}},
+          {"type": "polygon", "points": [[43,84],[60,84],[60,108]], "style": {"fill": "url(#s3l)", "stroke": "#00D4FF", "strokeWidth": 0.3, "strokeOpacity": 0.18}},
+          {"type": "polygon", "points": [[60,84],[77,84],[60,108]], "style": {"fill": "url(#s3r)", "stroke": "#00D4FF", "strokeWidth": 0.3, "strokeOpacity": 0.18}}
+        ]},
+
+        {"type": "line", "x1": 37, "y1": 60, "x2": 83, "y2": 60, "style": {"stroke": "#fff", "strokeWidth": 0.5, "opacity": 0.12}},
+        {"type": "line", "x1": 43, "y1": 84, "x2": 77, "y2": 84, "style": {"stroke": "#fff", "strokeWidth": 0.5, "opacity": 0.12}},
+
+        {"type": "line", "x1": 60, "y1": 36, "x2": 60, "y2": 108, "style": {"stroke": "#00D4FF", "strokeWidth": 1.5, "opacity": 0.06}},
+        {"type": "line", "x1": 60, "y1": 36, "x2": 60, "y2": 108, "style": {"stroke": "#fff", "strokeWidth": 0.4, "opacity": 0.12}},
+
+        {"type": "path", "d": "M 42,66 L 60,78 L 78,66", "style": {"fill": "none", "stroke": "#00D4FF", "strokeWidth": 1.2, "strokeLinecap": "round", "strokeLinejoin": "round", "opacity": 0.55}},
+        {"type": "path", "d": "M 46,72 L 60,81 L 74,72", "style": {"fill": "none", "stroke": "#00D4FF", "strokeWidth": 0.8, "strokeLinecap": "round", "strokeLinejoin": "round", "opacity": 0.35}},
+
+        {"type": "polygon", "points": [[37,58.5],[38.5,60],[37,61.5],[35.5,60]], "style": {"fill": "#00D4FF", "opacity": 0.45}},
+        {"type": "polygon", "points": [[83,58.5],[84.5,60],[83,61.5],[81.5,60]], "style": {"fill": "#00D4FF", "opacity": 0.45}},
+        {"type": "polygon", "points": [[43,82.5],[44.5,84],[43,85.5],[41.5,84]], "style": {"fill": "#00D4FF", "opacity": 0.45}},
+        {"type": "polygon", "points": [[77,82.5],[78.5,84],[77,85.5],[75.5,84]], "style": {"fill": "#00D4FF", "opacity": 0.45}},
+
+        {"type": "circle", "cx": 46, "cy": 46, "r": 0.7, "style": {"fill": "#00D4FF", "opacity": 0.35}},
+        {"type": "circle", "cx": 70, "cy": 50, "r": 0.6, "style": {"fill": "#00D4FF", "opacity": 0.28}},
+        {"type": "circle", "cx": 50, "cy": 68, "r": 0.7, "style": {"fill": "#00D4FF", "opacity": 0.3}},
+        {"type": "circle", "cx": 68, "cy": 73, "r": 0.5, "style": {"fill": "#00D4FF", "opacity": 0.25}},
+        {"type": "circle", "cx": 54, "cy": 93, "r": 0.6, "style": {"fill": "#00D4FF", "opacity": 0.28}},
+        {"type": "circle", "cx": 66, "cy": 98, "r": 0.5, "style": {"fill": "#00D4FF", "opacity": 0.22}},
+
+        {"type": "circle", "cx": 60, "cy": 114, "r": 10, "style": {"fill": "url(#spark-outer)"}},
+        {"type": "circle", "cx": 60, "cy": 114, "r": 5, "style": {"fill": "url(#spark-mid)"}},
+        {"type": "circle", "cx": 60, "cy": 114, "r": 2.8, "style": {"fill": "url(#spark-core)"}},
+        {"type": "circle", "cx": 59, "cy": 113, "r": 1, "style": {"fill": "#fff", "opacity": 0.55}},
+
+        {"type": "line", "x1": 60, "y1": 110, "x2": 60, "y2": 108, "style": {"stroke": "#FFD700", "strokeWidth": 0.7, "strokeLinecap": "round", "opacity": 0.5}},
+        {"type": "line", "x1": 60, "y1": 118, "x2": 60, "y2": 120, "style": {"stroke": "#FFD700", "strokeWidth": 0.7, "strokeLinecap": "round", "opacity": 0.5}},
+        {"type": "line", "x1": 56, "y1": 114, "x2": 54, "y2": 114, "style": {"stroke": "#FFD700", "strokeWidth": 0.7, "strokeLinecap": "round", "opacity": 0.5}},
+        {"type": "line", "x1": 64, "y1": 114, "x2": 66, "y2": 114, "style": {"stroke": "#FFD700", "strokeWidth": 0.7, "strokeLinecap": "round", "opacity": 0.5}},
+
+        {"type": "path", "d": "M 22,32 L 22,37 M 22,32 L 27,32", "style": {"fill": "none", "stroke": "#00D4FF", "strokeWidth": 0.8, "strokeLinecap": "round", "opacity": 0.18}},
+        {"type": "path", "d": "M 98,32 L 98,37 M 98,32 L 93,32", "style": {"fill": "none", "stroke": "#00D4FF", "strokeWidth": 0.8, "strokeLinecap": "round", "opacity": 0.18}},
+        {"type": "path", "d": "M 22,108 L 22,103 M 22,108 L 27,108", "style": {"fill": "none", "stroke": "#00D4FF", "strokeWidth": 0.8, "strokeLinecap": "round", "opacity": 0.18}},
+        {"type": "path", "d": "M 98,108 L 98,103 M 98,108 L 93,108", "style": {"fill": "none", "stroke": "#00D4FF", "strokeWidth": 0.8, "strokeLinecap": "round", "opacity": 0.18}},
+
+        {"type": "rect", "x": 14, "y": 24, "width": 92, "height": 92, "rx": 22, "ry": 22, "style": {"fill": "url(#glass)"}}
+      ]
+    },
+
+    {"type": "line", "x1": 124, "y1": 46, "x2": 124, "y2": 94, "style": {"stroke": "url(#brand-h)", "strokeWidth": 0.6, "opacity": 0.15}},
+
+    {"type": "text", "x": 140, "y": 80, "text": "ulpExtractor", "style": {"fontFamily": "'Segoe UI', 'Helvetica Neue', Arial, sans-serif", "fontSize": 37, "fontWeight": 800, "fill": "url(#brand-h)", "letterSpacing": -0.5}},
+
+    {"type": "text", "x": 142, "y": 103, "text": "DOMAIN CREDENTIAL EXTRACTOR", "style": {"fontFamily": "'Segoe UI', 'Helvetica Neue', Arial, sans-serif", "fontSize": 10, "fontWeight": 500, "fill": "#6B7B8D", "letterSpacing": 4.5}}
+  ]
+}

@@ -1,169 +1,60 @@
-<svg xmlns="http://www.w3.org/2000/svg"
-     xmlns:xlink="http://www.w3.org/1999/xlink"
-     viewBox="0 0 540 140"
-     width="540" height="140"
-     role="img"
-     aria-labelledby="logo-title logo-desc">
-
-  <title id="logo-title">ulpExtractor</title>
-  <desc id="logo-desc">Domain credential extractor — high-performance Rust CLI tool for parsing and extracting credentials</desc>
-
-  <defs>
-    <!-- Brand gradient: electric cyan -->
-    <linearGradient id="brand" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00D4FF"/>
-      <stop offset="50%" stop-color="#00B8D8"/>
-      <stop offset="100%" stop-color="#0098B0"/>
-    </linearGradient>
-
-    <!-- Brand horizontal for wordmark -->
-    <linearGradient id="brand-h" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#00D4FF"/>
-      <stop offset="100%" stop-color="#0098B0"/>
-    </linearGradient>
-
-    <!-- Accent: warm amber/coral for the output node -->
-    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFB347"/>
-      <stop offset="100%" stop-color="#FF6B6B"/>
-    </linearGradient>
-
-    <!-- Icon background: deep navy -->
-    <radialGradient id="icon-bg" cx="50%" cy="35%" r="60%">
-      <stop offset="0%" stop-color="#162435"/>
-      <stop offset="100%" stop-color="#0A1018"/>
-    </radialGradient>
-
-    <!-- Inner glow behind the extraction point -->
-    <radialGradient id="core-glow" cx="50%" cy="72%" r="30%">
-      <stop offset="0%" stop-color="#00D4FF" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#00D4FF" stop-opacity="0"/>
-    </radialGradient>
-
-    <!-- Output node glow -->
-    <radialGradient id="output-glow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#FFB347" stop-opacity="0.6"/>
-      <stop offset="40%" stop-color="#FF6B6B" stop-opacity="0.2"/>
-      <stop offset="100%" stop-color="#FF6B6B" stop-opacity="0"/>
-    </radialGradient>
-
-    <!-- Glass highlight overlay -->
-    <linearGradient id="glass" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#fff" stop-opacity="0.10"/>
-      <stop offset="40%" stop-color="#fff" stop-opacity="0.00"/>
-      <stop offset="100%" stop-color="#000" stop-opacity="0.06"/>
-    </linearGradient>
-
-    <!-- Crisp drop shadow -->
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#000" flood-opacity="0.35"/>
-    </filter>
-
-    <!-- Output node glow filter -->
-    <filter id="glow" x="-200%" y="-200%" width="500%" height="500%">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-
-    <!-- Subtle emboss on the funnel -->
-    <filter id="funnel-emboss" x="-10%" y="-10%" width="120%" height="120%">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="alpha-blur"/>
-      <feSpecularLighting in="alpha-blur" surfaceScale="2" specularConstant="0.5" specularExponent="20" result="spec">
-        <fePointLight x="50" y="20" z="100"/>
-      </feSpecularLighting>
-      <feComposite in="spec" in2="SourceAlpha" operator="in" result="spec-in"/>
-      <feComposite in="SourceGraphic" in2="spec-in" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"/>
-    </filter>
-  </defs>
-
-  <!-- ===== ICON MARK (100×100, positioned at x=10, y=20) ===== -->
-
-  <!-- Outer squircle container -->
-  <rect x="14" y="24" width="92" height="92" rx="22" ry="22"
-        fill="url(#icon-bg)" filter="url(#shadow)"/>
-
-  <!-- Subtle border -->
-  <rect x="14" y="24" width="92" height="92" rx="22" ry="22"
-        fill="none" stroke="#fff" stroke-width="0.5" opacity="0.08"/>
-
-  <!-- Core glow behind extraction area -->
-  <circle cx="60" cy="96" r="22" fill="url(#core-glow)"/>
-
-  <!-- Data input bars (top) — staggered widths representing url:user:pass -->
-  <rect x="34" y="38" width="52" height="3" rx="1.5" fill="url(#brand)" opacity="0.30"/>
-  <rect x="30" y="44" width="60" height="3" rx="1.5" fill="url(#brand)" opacity="0.22"/>
-  <rect x="37" y="50" width="46" height="3" rx="1.5" fill="url(#brand)" opacity="0.28"/>
-  <rect x="33" y="56" width="54" height="3" rx="1.5" fill="url(#brand)" opacity="0.18"/>
-
-  <!-- Extraction funnel — trapezoid narrowing from data to output -->
-  <path d="M 28,62 L 92,62 L 74,90 L 46,90 Z"
-        fill="url(#brand)" opacity="0.10"/>
-
-  <!-- Funnel inner channel — brighter core -->
-  <path d="M 36,62 L 84,62 L 70,88 L 50,88 Z"
-        fill="url(#brand)" opacity="0.22"/>
-
-  <!-- Funnel core — the tightest channel -->
-  <path d="M 42,62 L 78,62 L 66,86 L 54,86 Z"
-        fill="url(#brand)" opacity="0.35"/>
-
-  <!-- Left funnel wall accent line -->
-  <line x1="28" y1="62" x2="46" y2="90" stroke="url(#brand)" stroke-width="1" opacity="0.5"/>
-  <!-- Right funnel wall accent line -->
-  <line x1="92" y1="62" x2="74" y2="90" stroke="url(#brand)" stroke-width="1" opacity="0.5"/>
-
-  <!-- Filter chevrons — nested V shapes suggesting precision filtering -->
-  <path d="M 44,68 L 60,78 L 76,68"
-        fill="none" stroke="url(#brand)" stroke-width="1.8"
-        stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
-  <path d="M 48,73 L 60,81 L 72,73"
-        fill="none" stroke="url(#brand)" stroke-width="1.4"
-        stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
-
-  <!-- Center axis line -->
-  <line x1="60" y1="82" x2="60" y2="96" stroke="url(#brand)" stroke-width="0.8" opacity="0.3" stroke-dasharray="2,3"/>
-
-  <!-- Output node glow field -->
-  <circle cx="60" cy="102" r="10" fill="url(#output-glow)"/>
-
-  <!-- Output node — the extracted result -->
-  <circle cx="60" cy="102" r="4.5" fill="url(#accent)" filter="url(#glow)"/>
-
-  <!-- Output node inner highlight -->
-  <circle cx="59" cy="101" r="1.5" fill="#fff" opacity="0.4"/>
-
-  <!-- Corner accents — precision instrument feel -->
-  <path d="M 24,34 L 24,40 M 24,34 L 30,34" stroke="url(#brand)" stroke-width="1" opacity="0.25" fill="none" stroke-linecap="round"/>
-  <path d="M 96,34 L 96,40 M 96,34 L 90,34" stroke="url(#brand)" stroke-width="1" opacity="0.25" fill="none" stroke-linecap="round"/>
-  <path d="M 24,106 L 24,100 M 24,106 L 30,106" stroke="url(#brand)" stroke-width="1" opacity="0.25" fill="none" stroke-linecap="round"/>
-  <path d="M 96,106 L 96,100 M 96,106 L 90,106" stroke="url(#brand)" stroke-width="1" opacity="0.25" fill="none" stroke-linecap="round"/>
-
-  <!-- Glass overlay -->
-  <rect x="14" y="24" width="92" height="92" rx="22" ry="22" fill="url(#glass)"/>
-
-  <!-- ===== DIVIDER ===== -->
-  <line x1="124" y1="46" x2="124" y2="94" stroke="url(#brand)" stroke-width="0.6" opacity="0.18"/>
-
-  <!-- ===== WORDMARK ===== -->
-  <text x="140" y="80"
-        font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
-        font-size="37" font-weight="800"
-        fill="url(#brand-h)"
-        letter-spacing="-0.5">
-    ulpExtractor
-  </text>
-
-  <!-- Tagline -->
-  <text x="142" y="103"
-        font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
-        font-size="10" font-weight="500"
-        fill="#6B7B8D"
-        letter-spacing="4.5">
-    DOMAIN CREDENTIAL EXTRACTOR
-  </text>
-
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="540px" height="140px" viewBox="0 0 540 140" role="img" aria-labelledby="logo-title logo-desc"><title id="logo-title">ulpExtractor</title><desc id="logo-desc">Domain credential extractor — high-performance Rust CLI tool for parsing and extracting credentials with boundary-aware matching</desc>
+  <defs><radialGradient id="icon-bg" cx="0.5" cy="0.3" r="0.65" fx="0.45" fy="0.25"><stop offset="0%" stop-color="#162840" /><stop offset="45%" stop-color="#101C2A" /><stop offset="100%" stop-color="#080C14" /></radialGradient><radialGradient id="inner-glow" cx="0.5" cy="0.45" r="0.55"><stop offset="0%" stop-color="#00D4FF" stop-opacity="0.1" /><stop offset="60%" stop-color="#00D4FF" stop-opacity="0.03" /><stop offset="100%" stop-color="#00D4FF" stop-opacity="0" /></radialGradient>
+    <linearGradient id="s1l" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00A8D0" /><stop offset="100%" stop-color="#007898" /></linearGradient>
+    <linearGradient id="s1r" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00D4FF" /><stop offset="100%" stop-color="#00A0C8" /></linearGradient>
+    <linearGradient id="s2l" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#008CB0" /><stop offset="100%" stop-color="#006080" /></linearGradient>
+    <linearGradient id="s2r" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00B8E0" /><stop offset="100%" stop-color="#0088A8" /></linearGradient>
+    <linearGradient id="s3l" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#006E90" /><stop offset="100%" stop-color="#004868" /></linearGradient>
+    <linearGradient id="s3r" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0098C0" /><stop offset="100%" stop-color="#006888" /></linearGradient><radialGradient id="spark-outer" cx="0.5" cy="0.5" r="0.5"><stop offset="0%" stop-color="#FFB347" stop-opacity="0.7" /><stop offset="35%" stop-color="#FF8C42" stop-opacity="0.3" /><stop offset="70%" stop-color="#FF6B6B" stop-opacity="0.06" /><stop offset="100%" stop-color="#FF6B6B" stop-opacity="0" /></radialGradient><radialGradient id="spark-mid" cx="0.5" cy="0.5" r="0.5"><stop offset="0%" stop-color="#FFB347" stop-opacity="0.9" /><stop offset="50%" stop-color="#FF8C42" stop-opacity="0.4" /><stop offset="100%" stop-color="#E8403A" stop-opacity="0" /></radialGradient><radialGradient id="spark-core" cx="0.4" cy="0.35" r="0.5"><stop offset="0%" stop-color="#FFD700" /><stop offset="45%" stop-color="#FFA533" /><stop offset="100%" stop-color="#FF5C3A" /></radialGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff" stop-opacity="0.09" /><stop offset="35%" stop-color="#fff" stop-opacity="0.01" /><stop offset="65%" stop-color="#fff" stop-opacity="0" /><stop offset="100%" stop-color="#000" stop-opacity="0.08" /></linearGradient>
+    <linearGradient id="brand-h" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00D4FF" /><stop offset="100%" stop-color="#0098B0" /></linearGradient><filter id="icon-shadow" x="-30%" y="-30%" width="160%" height="165%"><feDropShadow dx="0" dy="1.5" stdDeviation="3" flood-color="#000" flood-opacity="0.25" /><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.18" /><feDropShadow dx="0" dy="10" stdDeviation="18" flood-color="#000" flood-opacity="0.1" /></filter><filter id="spark-glow" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter><filter id="spark-soft" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter></defs>
+  <g id="icon-mark">
+    <rect fill="#000" opacity="0.2" x="15" y="26" width="92" height="92" rx="22" ry="22" />
+    <rect fill="url(#icon-bg)" x="14" y="24" width="92" height="92" rx="22" ry="22" filter="url(#icon-shadow)" />
+    <rect fill="none" stroke="#fff" stroke-width="0.5" opacity="0.06" x="14.5" y="24.5" width="91" height="91" rx="21.5" ry="21.5" />
+    <circle fill="url(#inner-glow)" cx="60" cy="72" r="36" />
+  <g id="data-bars" opacity="0.8">
+    <rect fill="#00D4FF" opacity="0.3" x="32" y="28" width="56" height="1.8" rx="0.9" ry="0.9" />
+    <rect fill="#00D4FF" opacity="0.2" x="27" y="31" width="66" height="1.8" rx="0.9" ry="0.9" />
+    <rect fill="#00D4FF" opacity="0.25" x="35" y="34" width="50" height="1.8" rx="0.9" ry="0.9" /></g>
+  <g id="crystal">
+    <polygon fill="url(#s1l)" stroke="#00D4FF" stroke-width="0.3" stroke-opacity="0.18" points="27,36 60,36 60,60 37,60" />
+    <polygon fill="url(#s1r)" stroke="#00D4FF" stroke-width="0.3" stroke-opacity="0.18" points="60,36 93,36 83,60 60,60" />
+    <polygon fill="url(#s2l)" stroke="#00D4FF" stroke-width="0.3" stroke-opacity="0.18" points="37,60 60,60 60,84 43,84" />
+    <polygon fill="url(#s2r)" stroke="#00D4FF" stroke-width="0.3" stroke-opacity="0.18" points="60,60 83,60 77,84 60,84" />
+    <polygon fill="url(#s3l)" stroke="#00D4FF" stroke-width="0.3" stroke-opacity="0.18" points="43,84 60,84 60,108" />
+    <polygon fill="url(#s3r)" stroke="#00D4FF" stroke-width="0.3" stroke-opacity="0.18" points="60,84 77,84 60,108" /></g>
+    <line stroke="#fff" stroke-width="0.5" opacity="0.12" x1="37" y1="60" x2="83" y2="60" />
+    <line stroke="#fff" stroke-width="0.5" opacity="0.12" x1="43" y1="84" x2="77" y2="84" />
+    <line stroke="#00D4FF" stroke-width="1.5" opacity="0.06" x1="60" y1="36" x2="60" y2="108" />
+    <line stroke="#fff" stroke-width="0.4" opacity="0.12" x1="60" y1="36" x2="60" y2="108" />
+    <path fill="none" stroke="#00D4FF" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.55" d="M 42,66 L 60,78 L 78,66" />
+    <path fill="none" stroke="#00D4FF" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.35" d="M 46,72 L 60,81 L 74,72" />
+    <polygon fill="#00D4FF" opacity="0.45" points="37,58.5 38.5,60 37,61.5 35.5,60" />
+    <polygon fill="#00D4FF" opacity="0.45" points="83,58.5 84.5,60 83,61.5 81.5,60" />
+    <polygon fill="#00D4FF" opacity="0.45" points="43,82.5 44.5,84 43,85.5 41.5,84" />
+    <polygon fill="#00D4FF" opacity="0.45" points="77,82.5 78.5,84 77,85.5 75.5,84" />
+    <circle fill="#00D4FF" opacity="0.35" cx="46" cy="46" r="0.7" />
+    <circle fill="#00D4FF" opacity="0.28" cx="70" cy="50" r="0.6" />
+    <circle fill="#00D4FF" opacity="0.3" cx="50" cy="68" r="0.7" />
+    <circle fill="#00D4FF" opacity="0.25" cx="68" cy="73" r="0.5" />
+    <circle fill="#00D4FF" opacity="0.28" cx="54" cy="93" r="0.6" />
+    <circle fill="#00D4FF" opacity="0.22" cx="66" cy="98" r="0.5" />
+    <circle fill="url(#spark-outer)" cx="60" cy="114" r="10" filter="url(#spark-soft)" />
+    <circle fill="url(#spark-mid)" cx="60" cy="114" r="5" />
+    <circle fill="url(#spark-core)" cx="60" cy="114" r="2.8" filter="url(#spark-glow)" />
+    <circle fill="#fff" opacity="0.55" cx="59" cy="113" r="1" />
+    <line stroke="#FFD700" stroke-width="0.7" stroke-linecap="round" opacity="0.5" x1="60" y1="110" x2="60" y2="108" />
+    <line stroke="#FFD700" stroke-width="0.7" stroke-linecap="round" opacity="0.5" x1="60" y1="118" x2="60" y2="120" />
+    <line stroke="#FFD700" stroke-width="0.7" stroke-linecap="round" opacity="0.5" x1="56" y1="114" x2="54" y2="114" />
+    <line stroke="#FFD700" stroke-width="0.7" stroke-linecap="round" opacity="0.5" x1="64" y1="114" x2="66" y2="114" />
+    <path fill="none" stroke="#00D4FF" stroke-width="0.8" stroke-linecap="round" opacity="0.18" d="M 22,32 L 22,37 M 22,32 L 27,32" />
+    <path fill="none" stroke="#00D4FF" stroke-width="0.8" stroke-linecap="round" opacity="0.18" d="M 98,32 L 98,37 M 98,32 L 93,32" />
+    <path fill="none" stroke="#00D4FF" stroke-width="0.8" stroke-linecap="round" opacity="0.18" d="M 22,108 L 22,103 M 22,108 L 27,108" />
+    <path fill="none" stroke="#00D4FF" stroke-width="0.8" stroke-linecap="round" opacity="0.18" d="M 98,108 L 98,103 M 98,108 L 93,108" />
+    <rect fill="url(#glass)" x="14" y="24" width="92" height="92" rx="22" ry="22" /></g>
+    <line stroke="url(#brand-h)" stroke-width="0.6" opacity="0.15" x1="124" y1="46" x2="124" y2="94" />
+  <text font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="37" font-weight="800" fill="url(#brand-h)" letter-spacing="-0.5" x="140" y="80">ulpExtractor</text>
+  <text font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="10" font-weight="500" fill="#6B7B8D" letter-spacing="4.5" x="142" y="103">DOMAIN CREDENTIAL EXTRACTOR</text>
 </svg>
